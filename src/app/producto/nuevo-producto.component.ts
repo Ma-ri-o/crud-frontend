@@ -22,28 +22,33 @@ export class NuevoProductoComponent implements OnInit {
     private productoService: ProductoService,
     private toastr: ToastrService,
     private router: Router
-   ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onCreate(): void {
+
     const producto = new Producto(this.nombre, this.precio ?? 0);
-  
-    this.productoService.save(producto).subscribe(
-      data => {
-        this.toastr.success('Producto creado', 'Ok', {
-          timeOut: 3000,
-        });
-        this.router.navigate(['']);
-      },
-      err => {
-//const errorMessage = err.error.mensaje || 'Error desconocido'; // Asegúrate de que el error tenga esa estructura
-        this.toastr.error(err.error.mensaje, 'Fail', {
-          timeOut: 3000,
-        });
-        this.router.navigate(['']);
-      }
-    );
+
+    this.productoService.save(producto).subscribe
+      (
+        data => {
+          this.toastr.success('Producto creado', 'Ok', {
+            timeOut: 3000,
+          });
+          this.router.navigate(['']);
+
+        },
+        err => {
+          this.toastr.error
+            (err.error.mensaje, 'Fail', {
+              timeOut: 3000,
+            });
+          this.router.navigate(['']);
+        }
+
+      );
+
+  }
   }
   
-}
