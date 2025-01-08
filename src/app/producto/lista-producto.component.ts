@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Producto } from '../models/producto';
 import { ProductoService } from '../service/producto.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-lista-producto',
@@ -12,8 +13,13 @@ export class ListaProductoComponent  implements OnInit{
 
     productos: Producto[] = [];
 
-  constructor(private productoService: ProductoService){}
+  //constructor(private productoService: ProductoService){}
 
+  constructor(
+      private productoService: ProductoService,
+      private toastr: ToastrService
+      //private router: Router
+    ) {}
   
   ngOnInit() {
     this.cargarProductos();
@@ -32,14 +38,50 @@ export class ListaProductoComponent  implements OnInit{
       }
 
     );
-   
+    
+    
+  } 
+  /*  
   } 
   borrar(id?: number) {
-  //  console.log('Eliminar producto con ID:', id);
-  alert("borrar el" + id);
-  
-  // Lógica para eliminar el producto
-  }
-  
+   /* console.log('Eliminar producto con ID:', id);
+  alert("borrar el" + id); 
+  this.productoService.delete().subscribe(
+    err =>{
+      this.toastr.success('Producto eliminado', 'Ok', {
+        timeOut: 3000,positionClass: 'toast-top-center'
+      });
+      this.cargarProductos();
+    },
+     
+    err =>{
 
+      this.toastr.error
+            (err.error.mensaje, 'Fail', {
+              timeOut: 3000, positionClass: 'toast-top-center'
+            });   
+    }
+  );
+  } */
+  borrar(id?: number) {
+    if (id !== undefined) { 
+        this.productoService.delete(id).subscribe(
+            () => { 
+                this.toastr.success('Producto eliminado', 'Ok', {
+                    timeOut: 3000, positionClass: 'toast-top-center'
+                });
+                this.cargarProductos(); 
+            },
+            err => {
+                this.toastr.error(err.error.mensaje, 'Fail', {
+                    timeOut: 3000, positionClass: 'toast-top-center'
+                });
+            }
+        );
+    } else {
+        // Handle the case where 'id' is undefined (optional)
+        console.error('No product ID provided for deletion.'); 
+        // You can display an error message to the user here
+    }
+}
 }
