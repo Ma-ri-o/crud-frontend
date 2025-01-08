@@ -6,8 +6,8 @@ import { NuevoProductoComponent } from './producto/nuevo-producto.component';
 import { EditarProductoComponent } from './producto/editar-producto.component';
 
 const routes: Routes = [
-  {path: ' ', component: ListaProductoComponent},
-  {path: ' detail/id', component: DetalleProductoComponent},
+  {path: '', component: ListaProductoComponent},
+  {path: 'detail/id', component: DetalleProductoComponent},
   {path: 'nuevo', component: NuevoProductoComponent},
   {path: 'editar/id', component: EditarProductoComponent},
   {path: '**', redirectTo:' ',  pathMatch: "full"}

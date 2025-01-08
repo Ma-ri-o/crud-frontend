@@ -35,5 +35,12 @@ export class ListaProductoComponent  implements OnInit{
     );
    
   } 
+  borrar(id?: number) {
+  //  console.log('Eliminar producto con ID:', id);
+  alert("borrar el" + id);
+  
+  // Lógica para eliminar el producto
+  }
+  
 
 }
