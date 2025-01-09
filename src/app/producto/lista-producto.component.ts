@@ -9,38 +9,38 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './lista-producto.component.html',
   styleUrl: './lista-producto.component.css'
 })
-export class ListaProductoComponent  implements OnInit{
+export class ListaProductoComponent implements OnInit {
 
-    productos: Producto[] = [];
+  productos: Producto[] = [];
 
   //constructor(private productoService: ProductoService){}
 
   constructor(
-      private productoService: ProductoService,
-      private toastr: ToastrService
-      //private router: Router
-    ) {}
-  
+    private productoService: ProductoService,
+    private toastr: ToastrService
+    //private router: Router
+  ) { }
+
   ngOnInit() {
     this.cargarProductos();
 
-      
+
   }
 
-  cargarProductos(): void{
+  cargarProductos(): void {
     this.productoService.lista().subscribe(
 
-      data =>{
-        this.productos=data;
+      data => {
+        this.productos = data;
       },
-      err =>{
+      err => {
         console.log(err);
       }
 
     );
-    
-    
-  } 
+
+
+  }
   /*  
   } 
   borrar(id?: number) {
@@ -64,24 +64,24 @@ export class ListaProductoComponent  implements OnInit{
   );
   } */
   borrar(id?: number) {
-    if (id !== undefined) { 
-        this.productoService.delete(id).subscribe(
-            () => { 
-                this.toastr.success('Producto eliminado', 'Ok', {
-                    timeOut: 3000, positionClass: 'toast-top-center'
-                });
-                this.cargarProductos(); 
-            },
-            err => {
-                this.toastr.error(err.error.mensaje, 'Fail', {
-                    timeOut: 3000, positionClass: 'toast-top-center'
-                });
-            }
-        );
+    if (id !== undefined) {
+      this.productoService.delete(id).subscribe(
+        () => {
+          this.toastr.success('Producto eliminado', 'Ok', {
+            timeOut: 3000, positionClass: 'toast-top-center'
+          });
+          this.cargarProductos();
+        },
+        err => {
+          this.toastr.error(err.error.mensaje, 'Fail', {
+            timeOut: 3000, positionClass: 'toast-top-center'
+          });
+        }
+      );
     } else {
-        // Handle the case where 'id' is undefined (optional)
-        console.error('No product ID provided for deletion.'); 
-        // You can display an error message to the user here
+      // Handle the case where 'id' is undefined (optional)
+      console.error('No product ID provided for deletion.');
+      // You can display an error message to the user here
     }
-}
+  }
 }
