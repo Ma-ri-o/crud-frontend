@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ArrowDown, CalendarDays, Clock3, ExternalLink, Gift, MapPin, Sparkles } from "lucide-react";
 import type { EventConfig, StoryItem, TimelineItem } from "@/types/event";
 import { ScrollReveal, Parallax } from "@/components/invitation/Animations";
+import { canOptimizeEventImage } from "@/lib/event-images";
 
 export function HeroSection({ event }: { event: EventConfig }) {
   const date = new Date(`${event.date}T12:00:00`);
@@ -24,7 +25,7 @@ export function HeroSection({ event }: { event: EventConfig }) {
         </div>
         <ScrollReveal preset="zoomIn" delay={0.12} className="relative mx-auto w-full max-w-[520px]">
           <Parallax className="hero-art-frame" distance={24}>
-            {event.heroImage ? <Image src={event.heroImage} alt="" fill priority sizes="(max-width: 768px) 90vw, 40vw" className="object-cover" unoptimized /> : <div className="hero-art-placeholder"><span>{event.eventType === "wedding" ? "♡" : "✧"}</span><small>{event.hostName || "Un día para recordar"}</small></div>}
+            {event.heroImage ? <Image src={event.heroImage} alt="" fill priority sizes="(max-width: 768px) 90vw, 40vw" className="object-cover" unoptimized={!canOptimizeEventImage(event.heroImage)} /> : <div className="hero-art-placeholder"><span>{event.eventType === "wedding" ? "♡" : "✧"}</span><small>{event.hostName || "Un día para recordar"}</small></div>}
           </Parallax>
           <div className="hero-photo-label">{event.location}</div>
         </ScrollReveal>
@@ -41,7 +42,7 @@ function SectionHeading({ eyebrow, title, description }: { eyebrow: string; titl
 export function StorySection({ story, hostName }: { story: StoryItem[]; hostName?: string }) {
   if (!story.length) return null;
   return <section className="section-wrap" id="historia"><div className="section-container"><SectionHeading eyebrow="Nuestra historia" title="Un capítulo especial" description="Algunos momentos que nos trajeron hasta aquí." />
-    <div className="story-grid">{story.map((item, index) => <ScrollReveal key={`${item.title}-${index}`} delay={index * 0.07}><article className="story-card">{item.image && <div className="story-image"><Image src={item.image} alt={item.title} fill sizes="(max-width: 768px) 90vw, 40vw" className="object-cover" unoptimized /></div>}<span className="story-number">{String(index + 1).padStart(2, "0")}</span>{item.date && <p className="eyebrow">{item.date}</p>}<h3>{item.title}</h3><p>{item.body}</p>{hostName && index === story.length - 1 && <span className="story-signature">— {hostName}</span>}</article></ScrollReveal>)}</div>
+    <div className="story-grid">{story.map((item, index) => <ScrollReveal key={`${item.title}-${index}`} delay={index * 0.07}><article className="story-card">{item.image && <div className="story-image"><Image src={item.image} alt={item.title} fill sizes="(max-width: 768px) 90vw, 40vw" className="object-cover" unoptimized={!canOptimizeEventImage(item.image)} /></div>}<span className="story-number">{String(index + 1).padStart(2, "0")}</span>{item.date && <p className="eyebrow">{item.date}</p>}<h3>{item.title}</h3><p>{item.body}</p>{hostName && index === story.length - 1 && <span className="story-signature">— {hostName}</span>}</article></ScrollReveal>)}</div>
   </div></section>;
 }
 
@@ -72,5 +73,5 @@ export function TimelineSection({ timeline }: { timeline: TimelineItem[] }) {
 }
 
 export function FooterSection({ event }: { event: EventConfig }) {
-  return <footer className="event-footer"><span aria-hidden="true">✧</span><p>Con cariño, {event.hostName || "la familia anfitriona"}</p><small>Una celebración para recordar · {new Date(event.date).getFullYear()}</small></footer>;
+  return <footer className="event-footer"><span aria-hidden="true">✧</span><p>Con cariño, {event.hostName || "la familia anfitriona"}</p><small>Una celebración para recordar · {event.date.slice(0, 4)}</small></footer>;
 }
