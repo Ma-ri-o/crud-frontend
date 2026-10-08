@@ -1,72 +1,63 @@
-# Event Invitation Studio
+# Mariachi Mexicanísimo
 
-Reusable, mobile-first digital event invitation template built with Next.js 15, React, TypeScript, Tailwind CSS, Framer Motion, Lucide React and React Hook Form. The public invitation is rendered from `data/event.json`; the default page remains server rendered and interactive sections are split into lazy-loaded client components.
+Landing page responsive para promocionar y recibir solicitudes de cotización de Mariachi Mexicanísimo en la Zona Oriente del Estado de México. La experiencia prioriza WhatsApp, llamadas y un formulario de evento; está construida sobre el App Router y los patrones de componentes del repositorio existente.
 
-## Run locally
+## Requisitos
+
+- Node.js 20.19+, 22.13+ o 24+ (según dependencias actuales).
+- npm 10+.
+
+## Desarrollo local
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Abre [http://localhost:3000](http://localhost:3000). Para compilar para producción: `npm run build`; para iniciar esa compilación: `npm run start`.
 
-## Configure an invitation
+## Identidad y datos
 
-Edit `data/event.json`. Change the event type, copy, date, location, theme and section flags. A section renders only when its flag is enabled; story, gallery and timeline also need at least one item.
+La configuración pública de marca y contacto vive en `data/mariachi.json`:
 
-```json
-{
-  "eventType": "birthday",
-  "title": "Cumpleaños de Santiago",
-  "subtitle": "4 años",
-  "date": "2027-02-10",
-  "time": "16:00",
-  "location": "Ciudad de México",
-  "theme": "kids",
-  "sections": {
-    "countdown": true,
-    "story": false,
-    "details": true,
-    "gallery": true,
-    "map": true,
-    "gifts": false,
-    "rsvp": true,
-    "timeline": false,
-    "music": false
-  },
-  "story": [],
-  "gallery": [],
-  "timeline": [],
-  "gifts": { "links": [] },
-  "rsvp": { "enabled": true },
-  "confetti": { "enabled": true, "count": 55 }
-}
-```
+- Nombre y slogan.
+- Teléfono de contacto, número internacional para WhatsApp y mensaje inicial.
+- Cobertura principal.
 
-Available themes: `elegant`, `luxury`, `floral`, `kids`, `minions`, `superheroes`, `princess`, `space`, and `safari`. Each theme defines its own color tokens, display/body font stacks, decorative symbols, and background. Set `customColors` to override the primary, accent, background, or text color for a single event.
+Los servicios, repertorio y municipios están definidos como datos en `src/app/page.tsx`; los tipos de evento y validaciones del formulario están en `src/components/BookingForm.tsx`. Sustituye esos arreglos para editar el contenido conforme se agreguen datos reales. El número de WhatsApp usa formato internacional de `wa.me` (código de país y número, sin signos), separado del teléfono que se muestra al público.
 
-Gallery entries use `{ "src": "https://…", "alt": "…", "caption": "…" }`. Story entries use `{ "title": "…", "body": "…", "date": "…", "image": "https://…" }`. Timeline entries use `{ "time": "16:00", "title": "…", "description": "…" }`. Add a `heroImage` or a `music.src` URL to configure the cover image or audio track.
+## Experiencia y arquitectura
 
-## Local personalization panel
+- `src/app/page.tsx`: página principal server-rendered, navegación por anclas, hero, servicios, narrativa de marca, repertorio, cobertura, testimonios preparados y datos estructurados LocalBusiness.
+- `src/app/layout.tsx`: metadata SEO, Open Graph, Twitter Card, robots y viewport.
+- `src/app/globals.css`: estilos responsive mobile-first de esta landing, tokens de marca, estados de foco y respeto a movimiento reducido.
+- `src/components/Reveal.tsx`: componente de revelado al entrar al viewport, implementado con Framer Motion y compatible con preferencia de movimiento reducido.
+- `src/components/BookingForm.tsx`: formulario accesible con React Hook Form y Zod. Valida los campos y prepara un mensaje detallado en WhatsApp.
+- `src/components/WhatsappButton.tsx`: helper reutilizable para enlaces `wa.me` y botón flotante animado.
+- `data/mariachi.json`: configuración de contacto y marca.
 
-Visit `/studio` to edit event copy, date, location, image, theme, palette, music and RSVP delivery settings. Saving stores a preview configuration in the current browser. Use **Download event.json** to export it; put the exported file at `data/event.json` before building or deploying to publish the configuration. The studio is a local configuration editor, not a multi-user dashboard or cloud database.
+La solución conserva Next.js 15, React, TypeScript, Tailwind CSS, Framer Motion, Lucide React, React Hook Form y Zod presentes en el repositorio. La ruta `/studio` y la plantilla anterior de invitaciones siguen en el proyecto, aunque la ruta `/` ahora presenta esta landing comercial.
 
-The RSVP form validates guest details in the browser. To collect responses centrally, configure `rsvp.endpoint` with a service that accepts a JSON `POST`; alternatively set `rsvp.email` to open a prefilled email in the guest's mail app. No guest data is stored by this template. Add authentication and a persistent data service before turning `/studio` into a shared production dashboard.
+## Flujo de cotización y privacidad
 
-## Architecture
+El formulario no envía información a un servidor ni guarda datos en el navegador. Tras validar, abre WhatsApp con los detalles capturados para que la persona los revise y envíe. La solicitud no equivale a una reserva confirmada; el equipo debe confirmar disponibilidad y cotización por conversación. Si WhatsApp está bloqueado, el botón flotante permite iniciar un chat con el mensaje predeterminado.
 
-- `data/event.json`: event content and section switches.
-- `src/types/event.ts`: event, section, story, gallery, timeline and theme types.
-- `src/lib/themes.ts`: token sets for all nine themes.
-- `src/components/invitation/ThemeProvider.tsx`: maps a theme and optional custom colors to CSS variables.
-- `src/components/invitation/Sections.tsx`: reusable server-rendered hero, story, details, map, gifts, timeline and footer sections.
-- `src/components/invitation/Animations.tsx`: reduced-motion-aware `FadeUp`, `FadeDown`, `SlideLeft`, `SlideRight`, `ZoomIn`, `Parallax` and `ScrollReveal` primitives.
-- `src/components/invitation/InvitationServerRenderer.tsx`: conditionally renders the configured page on the server and lazy-loads interactive features.
-- `src/app/studio/page.tsx`: browser-based personalization form and JSON export.
+Para almacenar solicitudes, habilita un endpoint seguro con validación de servidor, controles anti-spam, aviso de privacidad, política de retención y consentimiento antes de recibir datos personales. No conectes credenciales o secretos al cliente.
 
-Metadata, Open Graph and Twitter card fields are derived from the default event config at build time. Use a public HTTPS image URL for social previews. Google Maps uses a lazy-loaded embed. The QR preview is generated by QRServer; replace that endpoint with a self-hosted QR library if third-party requests are unsuitable for your deployment.
+## Contenido pendiente de proporcionar
 
-## Deploy to Vercel
+No se recibieron fotografías propias, testimonios autorizados, redes sociales, domicilio comercial, precios, horarios ni dominio público. La composición usa ilustraciones CSS originales y no las presenta como fotografías ni como evidencia de clientes. El bloque de experiencias invita a compartir historias y debe reemplazarse por reseñas reales con autorización. Sin dominio ni imagen social aprobados, metadata no inventa URLs canónicas ni Open Graph.
 
-Import the repository into Vercel and deploy with the default Next.js settings. Keep the event configuration and image/audio URLs public and reachable. Rebuild after changing `data/event.json` so HTML metadata and the published page use the new event.
+## SEO y publicación
+
+Incluye el título y descripción solicitados, keywords locales, Open Graph, Twitter Summary Card, indexación y JSON-LD `LocalBusiness`. El Schema.org incluye teléfono, descripción, municipios de servicio y repertorio, sin inventar dirección, horarios, precios, calificaciones o reseñas.
+
+Antes de publicar:
+
+1. Confirma el formato WhatsApp y que el equipo atiende el número configurado.
+2. Añade dominio real con `metadataBase` y URL canónica cuando esté disponible.
+3. Proporciona una imagen social optimizada y fotografías autorizadas.
+4. Verifica municipios, cobertura, tiempos de atención y contenido comercial.
+5. Revisa aviso de privacidad para el flujo de contacto con datos personales.
+
+Importa el repositorio en Vercel con la configuración predeterminada de Next.js. Los cambios de metadata y contenido estático se publican con una nueva compilación.
