@@ -1,9 +1,27 @@
-node_modules
-.next
-out
-.vercel
-dist
-.angular
-*.log
+# Dependencias y artefactos de compilación
+node_modules/
+.next/
+out/
+.vercel/
+.netlify/
+dist/
+.angular/
+coverage/
+
+# Archivos locales y secretos
 .env*
 !.env.example
+*.local
+*.pem
+*.key
+
+# Configuración personal del editor (se conserva .vscode/tasks.json del proyecto)
+.vscode/settings.json
+
+# Sistema operativo y diagnósticos
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+stats.json
+*.tsbuildinfo
