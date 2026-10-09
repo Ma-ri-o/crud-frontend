@@ -28,7 +28,7 @@ Si la detección del framework no aparece, consulta la [documentación oficial d
 
 Comprueba la versión publicada desde un teléfono y un navegador de escritorio:
 
-- Los botones **Enviar mensaje** y **Reservar y cotizar** abren WhatsApp en `wa.me/525515333499` con mensajes iniciales distintos.
+- **Enviar mensaje** abre WhatsApp con un saludo. **Reservar y cotizar** abre un formulario; complétalo y selecciona **Continuar a WhatsApp** para revisar y enviar los datos del evento.
 - **Llamar Ahora** abre `tel:+525515333499`.
 - **Ir a Facebook** abre una búsqueda por el nombre del mariachi; reemplázala con el perfil oficial cuando esté disponible.
 - El QR se obtiene desde QRServer, un servicio externo que se puede sustituir por una imagen propia.

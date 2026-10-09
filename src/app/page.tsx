@@ -1,11 +1,11 @@
 import Image from "next/image";
-import { ArrowRight, Facebook, MapPin, MessageCircle, Music2, Phone } from "lucide-react";
+import { ArrowRight, Facebook, MapPin, MessageCircle, Phone } from "lucide-react";
+import { BookingForm } from "@/components/BookingForm";
 import { WhatsappButton } from "@/components/WhatsappButton";
 import mariachi from "../../data/mariachi.json";
 
 const phoneHref = `tel:+52${mariachi.phone}`;
 const whatsappHref = `https://wa.me/${mariachi.whatsappNumber}?text=${encodeURIComponent(mariachi.whatsappMessage)}`;
-const bookingHref = `https://wa.me/${mariachi.whatsappNumber}?text=${encodeURIComponent("Hola, Sr. Ray. Quiero reservar una presentación del Mariachi Mexicanísimo. ¿Me ayudan a confirmar disponibilidad y cotizar?")}`;
 const facebookHref = "https://www.facebook.com/search/top/?q=Mariachi%20Mexican%C3%ADsimo";
 const qrHref = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=8&data=${encodeURIComponent(whatsappHref)}`;
 
@@ -30,7 +30,7 @@ export default function HomePage() {
           <div className="compact-actions" aria-label="Contacta o reserva tu mariachi">
             <a className="compact-action action-whatsapp" href={whatsappHref} target="_blank" rel="noreferrer"><MessageCircle size={19} />Enviar mensaje</a>
             <a className="compact-action action-call" href={phoneHref}><Phone size={18} />Llamar ahora</a>
-            <a className="compact-action action-book" href={bookingHref} target="_blank" rel="noreferrer"><Music2 size={19} />Reservar y cotizar</a>
+            <BookingForm />
             <a className="compact-action action-facebook" href={facebookHref} target="_blank" rel="noreferrer"><Facebook size={19} />Ir a Facebook</a>
           </div>
           <p className="compact-location"><MapPin size={15} /> Zona Oriente, Estado de México</p>
@@ -45,7 +45,7 @@ export default function HomePage() {
 
       <footer className="compact-footer">
         <p>Solicita tu cotización sin compromiso.</p>
-        <a href={bookingHref} target="_blank" rel="noreferrer">Cotizar por WhatsApp <ArrowRight size={15} /></a>
+        <a href={whatsappHref} target="_blank" rel="noreferrer">Cotizar por WhatsApp <ArrowRight size={15} /></a>
         <div className="compact-qr">
           <span>Escanea para cotizar por WhatsApp</span>
           <Image src={qrHref} width={72} height={72} unoptimized alt="Código QR para cotizar por WhatsApp" />

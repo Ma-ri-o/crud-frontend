@@ -32,7 +32,7 @@ Los mensajes de WhatsApp, enlaces de contacto y QR se definen en `src/app/page.t
 - `src/app/layout.tsx`: metadata SEO, Open Graph, Twitter Card, robots y viewport.
 - `src/app/globals.css`: estilos responsive mobile-first de esta landing, tokens de marca, estados de foco y respeto a movimiento reducido.
 - `src/components/Reveal.tsx`: componente de revelado al entrar al viewport, implementado con Framer Motion y compatible con preferencia de movimiento reducido.
-- `src/components/BookingForm.tsx`: formulario accesible reutilizable; no se muestra en la landing compacta.
+- `src/components/BookingForm.tsx`: abre el formulario de reserva y prepara los datos validados para que el cliente los revise y los envíe por WhatsApp.
 - `src/components/WhatsappButton.tsx`: helper reutilizable para enlaces `wa.me` y botón flotante animado.
 - `data/mariachi.json`: configuración de contacto y marca.
 
@@ -40,7 +40,7 @@ La solución conserva Next.js 15, React, TypeScript, Tailwind CSS, Framer Motion
 
 ## Flujo de cotización y privacidad
 
-Los botones abren WhatsApp con un mensaje inicial para iniciar una conversación de cotización o reserva. La página no recibe ni guarda datos de clientes; el equipo debe confirmar disponibilidad y precio por conversación.
+El botón «Reservar y cotizar» abre un formulario para indicar nombre, teléfono, fecha, hora, municipio, tipo de evento, dirección y comentarios. Al validarlo se prepara un mensaje de WhatsApp; la persona revisa los datos y elige «Continuar a WhatsApp» para abrir el chat y enviarlo. La página no recibe ni guarda datos de clientes, y el equipo debe confirmar disponibilidad y precio por conversación.
 
 Para almacenar solicitudes, habilita un endpoint seguro con validación de servidor, controles anti-spam, aviso de privacidad, política de retención y consentimiento antes de recibir datos personales. No conectes credenciales o secretos al cliente.
 
