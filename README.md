@@ -16,6 +16,20 @@ npm run dev
 
 Abre [http://localhost:3000](http://localhost:3000). Para compilar para producción: `npm run build`; para iniciar esa compilación: `npm run start`.
 
+Para mantener Windows despierto, iniciar el servidor de desarrollo y abrir el sitio automáticamente, ejecuta en PowerShell:
+
+```powershell
+.\scripts\mantener-sesion.ps1
+```
+
+El script usa el primer puerto libre entre 3000 y 3001 y no detiene servidores que ya estuvieran ejecutándose. Déjalo abierto para conservar la pantalla activa. Cuando termines, ejecuta desde otra terminal PowerShell:
+
+```powershell
+.\scripts\mantener-sesion.ps1 -Mode Stop
+```
+
+Al detenerse, el script termina solamente el servidor que inició y restaura las opciones normales de energía de Windows. La opción de pantalla despierta es temporal: no modifica de forma permanente la configuración de energía del equipo.
+
 ## Identidad y datos
 
 La configuración pública de marca y contacto vive en `data/mariachi.json`:
