@@ -46,7 +46,7 @@ Para almacenar solicitudes, habilita un endpoint seguro con validación de servi
 
 ## Contenido pendiente de proporcionar
 
-No se recibieron fotografías propias, testimonios autorizados, redes sociales, domicilio comercial, precios, horarios ni dominio público. La composición usa ilustraciones CSS originales y no las presenta como fotografías ni como evidencia de clientes. El bloque de experiencias invita a compartir historias y debe reemplazarse por reseñas reales con autorización. Sin dominio ni imagen social aprobados, metadata no inventa URLs canónicas ni Open Graph.
+No se recibieron fotografías propias, testimonios autorizados, enlaces a perfiles oficiales, domicilio comercial, precios, horarios ni dominio público. La galería usa imágenes ilustrativas de Unsplash con carga diferida; sustitúyelas por fotografías autorizadas para mostrar presentaciones reales. Los enlaces de Facebook y YouTube abren búsquedas por el nombre del mariachi hasta que se proporcionen los perfiles oficiales. El bloque de experiencias invita a compartir historias y debe reemplazarse por reseñas reales con autorización. Sin dominio ni imagen social aprobados, metadata no inventa URLs canónicas ni Open Graph.
 
 ## SEO y publicación
 
@@ -60,4 +60,4 @@ Antes de publicar:
 4. Verifica municipios, cobertura, tiempos de atención y contenido comercial.
 5. Revisa aviso de privacidad para el flujo de contacto con datos personales.
 
-Importa el repositorio en Vercel con la configuración predeterminada de Next.js. Los cambios de metadata y contenido estático se publican con una nueva compilación.
+Consulta la [guía para publicar gratis en Netlify](./docs/DEPLOYMENT_FREE_HOSTING.md) para conectar el repositorio, configurar la compilación de Next.js y verificar el sitio. Los cambios de metadata y contenido se publican con una nueva compilación.

@@ -8,7 +8,7 @@ import { z } from "zod";
 import { whatsappHref } from "./WhatsappButton";
 
 const municipalities = ["Nezahualcóyotl", "Chimalhuacán", "Los Reyes La Paz", "Ixtapaluca", "Chalco", "Valle de Chalco", "Texcoco", "Ecatepec"];
-const eventTypes = ["Serenata", "Cumpleaños", "XV años", "Boda", "Aniversario", "Graduación", "Evento empresarial", "Otro"];
+const eventTypes = ["Serenata", "Boda", "XV años", "Cumpleaños", "Bautizo", "Aniversario", "Evento empresarial", "Pedida de mano", "Graduación", "Otro"];
 const schema = z.object({
   name: z.string().trim().min(2, "Escribe tu nombre (mínimo 2 caracteres)."),
   phone: z.string().trim().regex(/^[\d\s()+-]{10,18}$/, "Escribe un teléfono válido.").refine(value => value.replace(/\D/g, "").length === 10, "Incluye los 10 dígitos de tu teléfono."),
