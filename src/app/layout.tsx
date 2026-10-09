@@ -1,25 +1,26 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-const title = "Mariachi Mexicanísimo | Serenatas y Eventos en el Estado de México";
-const description = "Contrata al Mariachi Mexicanísimo para serenatas, cumpleaños, bodas y eventos especiales en la Zona Oriente del Estado de México. Atención inmediata vía WhatsApp.";
+import { eventConfig } from "@/config/event";
+const title = `${eventConfig.title} | Invitación de cumpleaños`;
+const description = eventConfig.description || `Acompáñanos a celebrar a ${eventConfig.title}.`;
 
 export const metadata: Metadata = {
   title,
   description,
-  applicationName: "Mariachi Mexicanísimo",
-  keywords: ["mariachi en Estado de México", "mariachi en Nezahualcóyotl", "serenatas", "mariachi para bodas", "mariachi para XV años", "mariachi en Zona Oriente"],
+  applicationName: eventConfig.title,
+  keywords: ["cumpleaños infantil", "invitación de cumpleaños", eventConfig.title, eventConfig.location],
   openGraph: {
     title,
     description,
     type: "website",
     locale: "es_MX",
-    siteName: "Mariachi Mexicanísimo"
+    siteName: eventConfig.title
   },
   twitter: { card: "summary", title, description },
   robots: { index: true, follow: true }
 };
 
-export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#f6f0e5" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#fffbea" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="es-MX"><body>{children}</body></html>;

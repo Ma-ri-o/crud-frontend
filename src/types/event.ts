@@ -56,12 +56,14 @@ export interface EventSections {
 export interface EventConfig {
   eventType: EventType;
   title: string;
+  age?: number;
   subtitle?: string;
   description?: string;
   date: string;
   time?: string;
   location: string;
   address?: string;
+  dressCode?: string;
   mapUrl?: string;
   theme: ThemeName;
   customColors?: { primary?: string; accent?: string; background?: string; text?: string };
@@ -78,6 +80,7 @@ export interface EventConfig {
     email?: string;
     endpoint?: string;
     phone?: string;
+    message?: string;
   };
   music?: { src: string; title?: string };
   confetti?: { enabled: boolean; count?: number };

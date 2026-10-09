@@ -1,63 +1,53 @@
-# Mariachi Mexicanísimo
+# Invitación de cumpleaños de Emiliano Ulises
 
-Landing page responsive para promocionar y recibir solicitudes de cotización de Mariachi Mexicanísimo en la Zona Oriente del Estado de México. La experiencia prioriza WhatsApp, llamadas y un formulario de evento; está construida sobre el App Router y los patrones de componentes del repositorio existente.
+Invitación digital interactiva para celebrar los 4 años de Emiliano Ulises. Está construida con Next.js 15, React 19, TypeScript, Tailwind CSS y Framer Motion. La ilustración del personaje es original y está hecha con CSS; no utiliza personajes ni imágenes oficiales.
 
-## Requisitos
+## Requisitos y desarrollo
 
-- Node.js 20.19+, 22.13+ o 24+ (según dependencias actuales).
-- npm 10+.
-
-## Desarrollo local
+- Node.js 20.19+ y npm 10+.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abre [http://localhost:3000](http://localhost:3000). Para compilar para producción: `npm run build`; para iniciar esa compilación: `npm run start`.
+Abre <http://localhost:3000>. Ejecuta `npm run build` para comprobar la compilación de producción y `npm run start` para servirla localmente.
 
-## Identidad y datos
+## Cambiar el contenido
 
-La configuración pública de marca y contacto vive en `data/mariachi.json`:
+El contenido publicado se centraliza en `src/config/event.ts`. Edita el objeto `eventConfig` y vuelve a desplegar:
 
-- Nombre y slogan.
-- Teléfono de contacto, número internacional para WhatsApp y mensaje inicial.
-- Cobertura principal.
+- **Nombre:** `title`.
+- **Edad:** `age`; también se muestra en el hero.
+- **Fecha y hora:** `date` en formato `AAAA-MM-DD` y `time` en formato de 24 horas. Al definir la fecha se activa el contador real. Mientras falte, la invitación indica que está por confirmarse.
+- **Ubicación:** cambia `location`, `address` y `mapUrl`. El mapa actual apunta a Cocotitlán; la dirección exacta y fecha/hora están pendientes de confirmación.
+- **WhatsApp:** `rsvp.phone` debe llevar código de país y solo dígitos. `rsvp.message` define el texto precargado. El número configurado es `525515333499`.
+- **Colores:** modifica `customColors` (`primary`, `accent`, `background`, `text`) o selecciona otro tema.
+- **Secciones:** activa o desactiva countdown, historia, detalles, galería, mapa, RSVP, música y otras secciones mediante `sections`.
 
-Los servicios, repertorio y municipios están definidos como datos en `src/app/page.tsx`; los tipos de evento y validaciones del formulario están en `src/components/BookingForm.tsx`. Sustituye esos arreglos para editar el contenido conforme se agreguen datos reales. El número de WhatsApp usa formato internacional de `wa.me` (código de país y número, sin signos), separado del teléfono que se muestra al público.
+### Cambiar fotografías
 
-## Experiencia y arquitectura
+Reemplaza los elementos del arreglo `gallery` con `{ src, alt, caption }`. Puedes usar URLs HTTPS o archivos propios dentro de `public/`, por ejemplo `src: "/images/foto-1.webp"`. Escribe siempre un texto `alt` que describa la imagen. `heroImage` reemplaza la ilustración del hero; si no se define, se muestra el personaje CSS original. Las fotografías actuales son imágenes de muestra de Unsplash, no fotografías de Emiliano.
 
-- `src/app/page.tsx`: página principal server-rendered, navegación por anclas, hero, servicios, narrativa de marca, repertorio, cobertura, testimonios preparados y datos estructurados LocalBusiness.
-- `src/app/layout.tsx`: metadata SEO, Open Graph, Twitter Card, robots y viewport.
-- `src/app/globals.css`: estilos responsive mobile-first de esta landing, tokens de marca, estados de foco y respeto a movimiento reducido.
-- `src/components/Reveal.tsx`: componente de revelado al entrar al viewport, implementado con Framer Motion y compatible con preferencia de movimiento reducido.
-- `src/components/BookingForm.tsx`: formulario accesible con React Hook Form y Zod. Valida los campos y prepara un mensaje detallado en WhatsApp.
-- `src/components/WhatsappButton.tsx`: helper reutilizable para enlaces `wa.me` y botón flotante animado.
-- `data/mariachi.json`: configuración de contacto y marca.
+### Música
 
-La solución conserva Next.js 15, React, TypeScript, Tailwind CSS, Framer Motion, Lucide React, React Hook Form y Zod presentes en el repositorio. La ruta `/studio` y la plantilla anterior de invitaciones siguen en el proyecto, aunque la ruta `/` ahora presenta esta landing comercial.
+Para habilitar el control, define `music.src` con una ruta de audio (por ejemplo `/music/celebracion.mp3`) y activa `sections.music`. El archivo debe estar dentro de `public/music/` o tener una URL accesible. La reproducción solo comienza después de que el invitado pulse el control.
 
-## Flujo de cotización y privacidad
+## Editor local
 
-El formulario no envía información a un servidor ni guarda datos en el navegador. Tras validar, abre WhatsApp con los detalles capturados para que la persona los revise y envíe. La solicitud no equivale a una reserva confirmada; el equipo debe confirmar disponibilidad y cotización por conversación. Si WhatsApp está bloqueado, el botón flotante permite iniciar un chat con el mensaje predeterminado.
+`/studio` ofrece una vista previa editable de nombre, edad, fecha, hora, ubicación, vestimenta, colores, mapa, música y confirmación. Los cambios se guardan en el `localStorage` del navegador y no se publican. Para publicar, cambia `src/config/event.ts` y despliega de nuevo.
 
-Para almacenar solicitudes, habilita un endpoint seguro con validación de servidor, controles anti-spam, aviso de privacidad, política de retención y consentimiento antes de recibir datos personales. No conectes credenciales o secretos al cliente.
+## Accesibilidad, rendimiento y SEO
 
-## Contenido pendiente de proporcionar
+- Render del evento en servidor, imágenes con `next/image` y carga diferida de secciones interactivas.
+- Navegación por teclado, foco visible, textos alternativos y controles etiquetados.
+- Se respeta `prefers-reduced-motion` en animaciones y partículas.
+- Metadata, Open Graph, Twitter Card y viewport se generan desde la configuración del evento.
+- Los enlaces de Google Maps y WhatsApp abren servicios externos; confirmar por WhatsApp no almacena respuestas en esta aplicación.
 
-No se recibieron fotografías propias, testimonios autorizados, redes sociales, domicilio comercial, precios, horarios ni dominio público. La composición usa ilustraciones CSS originales y no las presenta como fotografías ni como evidencia de clientes. El bloque de experiencias invita a compartir historias y debe reemplazarse por reseñas reales con autorización. Sin dominio ni imagen social aprobados, metadata no inventa URLs canónicas ni Open Graph.
+## Desplegar en Vercel
 
-## SEO y publicación
-
-Incluye el título y descripción solicitados, keywords locales, Open Graph, Twitter Summary Card, indexación y JSON-LD `LocalBusiness`. El Schema.org incluye teléfono, descripción, municipios de servicio y repertorio, sin inventar dirección, horarios, precios, calificaciones o reseñas.
-
-Antes de publicar:
-
-1. Confirma el formato WhatsApp y que el equipo atiende el número configurado.
-2. Añade dominio real con `metadataBase` y URL canónica cuando esté disponible.
-3. Proporciona una imagen social optimizada y fotografías autorizadas.
-4. Verifica municipios, cobertura, tiempos de atención y contenido comercial.
-5. Revisa aviso de privacidad para el flujo de contacto con datos personales.
-
-Importa el repositorio en Vercel con la configuración predeterminada de Next.js. Los cambios de metadata y contenido estático se publican con una nueva compilación.
+1. Sube el repositorio a GitHub e impórtalo desde el panel de Vercel.
+2. Conserva el preset **Next.js** y los comandos por defecto (`npm install` y `npm run build`). No hacen falta variables de entorno para la configuración actual.
+3. Antes de publicar, confirma fecha, hora, dirección completa, número de WhatsApp y autorización de las fotografías.
+4. Publica. Cada cambio posterior en `src/config/event.ts` requiere un nuevo despliegue.
