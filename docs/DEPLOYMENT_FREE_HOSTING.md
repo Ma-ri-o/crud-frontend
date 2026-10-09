@@ -28,20 +28,19 @@ Si la detección del framework no aparece, consulta la [documentación oficial d
 
 Comprueba la versión publicada desde un teléfono y un navegador de escritorio:
 
-- El botón de WhatsApp abre `wa.me/525515333499` y el formulario prepara los datos sin enviarlos hasta que la persona confirme en WhatsApp.
+- Los botones **Enviar mensaje** y **Reservar y cotizar** abren WhatsApp en `wa.me/525515333499` con mensajes iniciales distintos.
 - **Llamar Ahora** abre `tel:+525515333499`.
-- Las búsquedas de Facebook y YouTube abren la plataforma; reemplázalas por los perfiles oficiales cuando estén disponibles.
-- Las imágenes de la galería cargan al acercarse a su sección. QRServer y Unsplash son servicios externos; para controlar disponibilidad y privacidad, se pueden reemplazar por recursos propios.
-- Revisa título, descripción, navegación, formulario, contraste, foco de teclado y el aviso de privacidad que corresponda antes de promocionar el sitio.
+- **Ir a Facebook** abre una búsqueda por el nombre del mariachi; reemplázala con el perfil oficial cuando esté disponible.
+- El QR se obtiene desde QRServer, un servicio externo que se puede sustituir por una imagen propia.
+- Revisa título, descripción, navegación, contraste, foco de teclado y el aviso de privacidad que corresponda antes de promocionar el sitio.
 
 Netlify crea una vista previa por cada pull request y publica los cambios de la rama configurada después de una nueva compilación. Para regresar a una publicación anterior, selecciona el deploy estable en el historial de **Deploys** y publícalo de nuevo. Consulta el [plan y sus límites vigentes](https://www.netlify.com/pricing/); suspensiones, límites de uso y condiciones pueden cambiar.
 
 ## Actualizar el contenido
 
 - Teléfono, WhatsApp y mensaje inicial: `data/mariachi.json`.
-- Servicios, fotos, enlaces sociales, municipios y galerías: `src/app/page.tsx`.
-- Tipos de evento del formulario: `src/components/BookingForm.tsx`.
+- Mensajes de contacto, enlaces de redes y QR: `src/app/page.tsx`.
 - Colores, layout y vista móvil: `src/app/globals.css`.
-- El QR se puede cambiar sustituyendo `qrImageSrc` en `src/app/page.tsx` por la ruta pública de una imagen QR aprobada.
+- El QR se puede cambiar sustituyendo `qrHref` en `src/app/page.tsx` por la ruta pública de una imagen QR aprobada.
 
 Para usar un dominio propio, configura el dominio en el panel de Netlify y sigue las instrucciones DNS del proveedor. El sitio también necesita un aviso de privacidad apropiado si se promociona y procesa información personal.
