@@ -1,77 +1,83 @@
 # Mariachi Mexicanísimo
 
-Landing page responsive para promocionar y recibir solicitudes de cotización de Mariachi Mexicanísimo en la Zona Oriente del Estado de México. La experiencia prioriza WhatsApp, llamadas y un formulario de evento; está construida sobre el App Router y los patrones de componentes del repositorio existente.
+Landing premium mobile-first para generar contactos para **Mariachi Mexicanísimo**. Construida con Angular standalone, TypeScript estricto, rutas lazy, señales, formularios reactivos y `NgOptimizedImage`.
 
-## Requisitos
+## Requisitos y comandos
 
-- Node.js 20.19+, 22.13+ o 24+ (según dependencias actuales).
+- Node.js 24 LTS (Angular 21 también admite Node.js 20.19+ y 22.12+).
 - npm 10+.
-
-## Desarrollo local
 
 ```bash
 npm install
-npm run dev
+npm start                 # http://localhost:4200
+npm run build             # compilación optimizada de producción
+npm run analyze           # produce stats.json para analizar bundles
 ```
 
-Abre [http://localhost:3000](http://localhost:3000). Para compilar para producción: `npm run build`; para iniciar esa compilación: `npm run start`.
+El build de producción aplica optimización, hashing, tree shaking, minificación y presupuestos para el bundle inicial y SCSS. No hay bibliotecas de iconos, animación ni formularios de terceros.
 
-Para mantener Windows despierto, iniciar el servidor de desarrollo y abrir el sitio automáticamente, ejecuta en PowerShell:
+## Organización
 
-```powershell
-.\scripts\mantener-sesion.ps1
+```text
+src/
+├── app/
+│   ├── core/              # configuración, SEO y servicio de leads
+│   ├── shared/            # formulario reutilizable
+│   ├── features/
+│   │   ├── home/           # landing y acciones principales
+│   │   ├── contact/        # contacto directo (lazy route)
+│   │   ├── gallery/        # galería y lightbox (lazy route)
+│   │   └── booking/        # reserva (lazy route)
+│   └── app.routes.ts
+├── index.html              # SEO inicial y JSON-LD LocalBusiness
+├── main.ts
+└── styles.scss
+public/
+└── images/mariachi/        # fotografías WebP/AVIF de galería
 ```
 
-El script usa el primer puerto libre entre 3000 y 3001 y no detiene servidores que ya estuvieran ejecutándose. Déjalo abierto para conservar la pantalla activa. Cuando termines, ejecuta desde otra terminal PowerShell:
+Todas las vistas son standalone y usan `ChangeDetectionStrategy.OnPush`. `SeoService` actualiza título y descripción al cargar el landing. La ruta `/` muestra de inmediato botones de WhatsApp, llamada, reserva, cotización y Facebook; incluye los cinco beneficios, cinco fotografías y QR. El formulario solo abre WhatsApp con el texto preparado; el visitante revisa y envía el mensaje desde WhatsApp, no se almacenan datos.
 
-```powershell
-.\scripts\mantener-sesion.ps1 -Mode Stop
+## Configuración del negocio
+
+En `src/app/core/site-config.ts` edita:
+
+- `phone`: teléfono visible y destino `tel:`.
+- `whatsappNumber`: número internacional sin `+`, espacios ni guiones para `wa.me`.
+- `attendant` y `serviceArea`: atención y cobertura.
+- `facebookUrl` y `youtubeUrl`: enlaces oficiales. El proyecto trae búsquedas provisionales porque no se proporcionaron perfiles oficiales.
+- `qrImage` y `qrTarget`: imagen y destino del QR. Por defecto `qrImage` solicita un PNG de QR a QRServer usando `qrTarget`; puedes apuntarlo a un QR propio dentro de `public/images/`.
+
+La descripción SEO y keywords están en `src/index.html`; `LocalBusiness` contiene teléfono y zona de servicio, sin inventar domicilio, horarios ni calificaciones. Actualiza título/descripción del `<head>` allí y en `SeoService` si cambia la marca.
+
+## Cambiar fotografías
+
+Las cinco fotografías de `img-mariachi/` ya están copiadas a `public/images/mariachi/` y conectadas desde `src/app/features/gallery/gallery.component.ts`. Para reemplazarlas o sumar una sexta, agrega la imagen optimizada (idealmente AVIF o WebP, ancho cercano a 1200 px y menor de 250 KB) y actualiza el arreglo `photos` con ruta, texto alternativo y caption:
+
+```ts
+{ src: '/images/mariachi/serenata-1.webp', alt: 'Mariachi durante una serenata', caption: 'Serenatas que emocionan' }
 ```
 
-Al detenerse, el script termina solamente el servidor que inició y restaura las opciones normales de energía de Windows. La opción de pantalla despierta es temporal: no modifica de forma permanente la configuración de energía del equipo.
+La galería establece `sizes`, dimensiones reservadas y carga diferida nativa; la primera imagen usa prioridad para mejorar carga inicial. Cada tarjeta se puede pulsar para abrir la foto en un visor accesible. `NgOptimizedImage` organiza carga responsive; Angular sirve los assets estáticos sin un servidor de transformación de imágenes, así que exporta los formatos y tamaños optimizados antes de subirlos.
 
-## Identidad y datos
+## Despliegue
 
-La configuración pública de marca y contacto vive en `data/mariachi.json`:
+El directorio estático de salida es `dist/mariachi-mexicanisimo/browser`. En todos los proveedores instala dependencias con `npm install` y ejecuta `npm run build`.
 
-- Nombre y slogan.
-- Teléfono de contacto, número internacional para WhatsApp y mensaje inicial.
-- Cobertura principal.
+### Vercel
 
-Los mensajes de WhatsApp, enlaces de contacto y QR se definen en `src/app/page.tsx`; el número de WhatsApp usa formato internacional de `wa.me` (código de país y número, sin signos), separado del teléfono que se muestra al público.
+Importa el repositorio, elige **Other** si no detecta Angular, configura build `npm run build` y output `dist/mariachi-mexicanisimo/browser`. `vercel.json` incluye fallback para las rutas Angular.
 
-## Experiencia y arquitectura
+### Netlify
 
-- `src/app/page.tsx`: página principal server-rendered y compacta, con presentación, contacto directo, accesos para reservar/cotizar, Facebook y QR.
-- `src/app/layout.tsx`: metadata SEO, Open Graph, Twitter Card, robots y viewport.
-- `src/app/globals.css`: estilos responsive mobile-first de esta landing, tokens de marca, estados de foco y respeto a movimiento reducido.
-- `src/components/Reveal.tsx`: componente de revelado al entrar al viewport, implementado con Framer Motion y compatible con preferencia de movimiento reducido.
-- `src/components/BookingForm.tsx`: abre el formulario de reserva y prepara los datos validados para que el cliente los revise y los envíe por WhatsApp.
-- `src/components/WhatsappButton.tsx`: helper reutilizable para enlaces `wa.me` y botón flotante animado.
-- `data/mariachi.json`: configuración de contacto y marca.
+Importa el repositorio. Build command: `npm run build`; publish directory: `dist/mariachi-mexicanisimo/browser`. `public/_redirects` conserva rutas SPA y se copia al output.
 
-La solución conserva Next.js 15, React, TypeScript, Tailwind CSS, Framer Motion, Lucide React, React Hook Form y Zod presentes en el repositorio. La ruta `/studio` y la plantilla anterior de invitaciones siguen en el proyecto, aunque la ruta `/` ahora presenta esta landing comercial.
+### Azure Static Web Apps
 
-## Flujo de cotización y privacidad
+Conecta el repositorio en Azure Static Web Apps. App location `/`, API location vacío y output location `dist/mariachi-mexicanisimo/browser`. `staticwebapp.config.json` reescribe rutas SPA hacia `index.html`.
 
-El botón «Reservar y cotizar» abre un formulario para indicar nombre, teléfono, fecha, hora, municipio, tipo de evento, dirección y comentarios. Al validarlo se prepara un mensaje de WhatsApp; la persona revisa los datos y elige «Continuar a WhatsApp» para abrir el chat y enviarlo. La página no recibe ni guarda datos de clientes, y el equipo debe confirmar disponibilidad y precio por conversación.
+## Calidad y SEO
 
-Para almacenar solicitudes, habilita un endpoint seguro con validación de servidor, controles anti-spam, aviso de privacidad, política de retención y consentimiento antes de recibir datos personales. No conectes credenciales o secretos al cliente.
+El HTML inicial incluye title, descripción, keywords locales, Open Graph, Twitter Cards, viewport móvil, icono y JSON-LD `LocalBusiness`. Usa Lighthouse local en móvil y desktop para revisar Core Web Vitals y metas de rendimiento, accesibilidad, SEO y buenas prácticas. El resultado >90 depende también del hosting, caché, conexión, imágenes finales, contenido social y auditoría del navegador; no se promete una puntuación antes de medir la versión desplegada.
 
-## Contenido pendiente de proporcionar
-
-No se recibieron enlaces al perfil oficial de Facebook, domicilio comercial, precios, horarios ni dominio público. El enlace de Facebook abre una búsqueda por el nombre del mariachi hasta que se proporcione el perfil correcto. El QR se genera mediante QRServer. Sin dominio ni imagen social aprobados, metadata no inventa URLs canónicas ni Open Graph.
-
-## SEO y publicación
-
-Incluye el título y descripción solicitados, keywords locales, Open Graph, Twitter Summary Card, indexación y JSON-LD `LocalBusiness`. El Schema.org incluye teléfono, descripción, municipios de servicio y repertorio, sin inventar dirección, horarios, precios, calificaciones o reseñas.
-
-Antes de publicar:
-
-1. Confirma el formato WhatsApp y que el equipo atiende el número configurado.
-2. Añade dominio real con `metadataBase` y URL canónica cuando esté disponible.
-3. Proporciona una imagen social optimizada y el enlace oficial de Facebook.
-4. Verifica el teléfono, la cobertura y el contenido comercial.
-5. Revisa el aviso de privacidad que corresponda al sitio.
-
-Consulta la [guía para publicar gratis en Netlify](./docs/DEPLOYMENT_FREE_HOSTING.md) para conectar el repositorio, configurar la compilación de Next.js y verificar el sitio. Los cambios de metadata y contenido se publican con una nueva compilación.
+Reemplaza antes de publicar las URLs provisionales de búsqueda de redes y el QR si tienes uno de marca. Añade una URL canónica e imagen Open Graph cuando se confirme el dominio y el material oficial.

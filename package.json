@@ -1,32 +1,35 @@
 {
-  "name": "event-invitation-studio",
-  "version": "1.0.0",
+  "name": "mariachi-mexicanisimo",
+  "version": "2.0.0",
   "private": true,
+  "description": "Landing Angular para Mariachi Mexicanísimo",
+  "engines": {
+    "node": "^20.19.0 || ^22.12.0 || ^24.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "ng serve",
+    "serve": "ng serve",
+    "build": "ng build",
+    "build:production": "ng build --configuration production",
+    "analyze": "ng build --stats-json"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.2.2",
-    "framer-motion": "^12.23.24",
-    "lucide-react": "^0.468.0",
-    "next": "15.5.9",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "react-hook-form": "^7.65.0",
-    "zod": "^4.1.12"
+    "@angular/common": "^21.2.0",
+    "@angular/compiler": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/platform-browser": "^21.2.0",
+    "@angular/router": "^21.2.0",
+    "rxjs": "^7.8.2",
+    "tslib": "^2.8.1",
+    "zone.js": "~0.16.0"
   },
   "devDependencies": {
-    "@types/node": "^22.10.2",
-    "@types/react": "^19.0.6",
-    "@types/react-dom": "^19.0.2",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "15.5.9",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2"
+    "@angular/build": "^21.2.0",
+    "@angular/cli": "^21.2.0",
+    "@angular/compiler-cli": "^21.2.0",
+    "sass": "^1.97.0",
+    "typescript": "~5.9.3"
   }
 }
