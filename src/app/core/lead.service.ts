@@ -6,18 +6,26 @@ export interface LeadRequest {
   phone: string;
   eventType: string;
   date: string;
-  comments: string;
+  municipality: string;
+  address: string;
+  references: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class LeadService {
   buildWhatsAppUrl(request: LeadRequest): string {
+    const [year, month, day] = request.date.split('-');
+    const formattedDate = year && month && day ? `${day}/${month}/${year}` : request.date;
     const message = [
-      `Hola, soy ${request.name}. Me gustaría solicitar una cotización para Mariachi Mexicanísimo.`,
+      'Hola, deseo solicitar una cotización para Mariachi Mexicanísimo.',
+      '',
+      `Nombre: ${request.name}`,
       `Teléfono: ${request.phone}`,
-      `Tipo de evento: ${request.eventType}`,
-      `Fecha: ${request.date}`,
-      request.comments ? `Comentarios: ${request.comments}` : '',
+      `Evento: ${request.eventType}`,
+      `Fecha: ${formattedDate}`,
+      `Municipio: ${request.municipality}`,
+      `Dirección: ${request.address}`,
+      `Comentarios: ${request.references || 'Sin comentarios adicionales.'}`,
     ].filter(Boolean).join('\n');
     return whatsappLink(message);
   }
