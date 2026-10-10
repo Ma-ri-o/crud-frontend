@@ -1,42 +1,27 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# Dependencias y artefactos de compilación
+node_modules/
+.next/
+out/
+.vercel/
+.netlify/
+dist/
+.angular/
+coverage/
 
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+# Archivos locales y secretos
+.env*
+!.env.example
+*.local
+*.pem
+*.key
 
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
+# Configuración personal del editor (se conserva .vscode/tasks.json del proyecto)
+.vscode/settings.json
 
-# IDEs and editors
-.idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
-
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-
-# System files
+# Sistema operativo y diagnósticos
 .DS_Store
 Thumbs.db
+*.log
+npm-debug.log*
+stats.json
+*.tsbuildinfo
