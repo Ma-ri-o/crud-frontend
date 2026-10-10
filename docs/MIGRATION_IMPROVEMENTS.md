@@ -59,7 +59,7 @@ Esta actualización mejora la captación de solicitudes y la accesibilidad sobre
 
 ## Verificación y límites
 
-- Ejecutar `npm run build` para validar la compilación de producción.
+- `npm run build` completó correctamente. El bundle inicial resultó en 301.78 kB sin comprimir y 85.80 kB de transferencia estimada; galería y otras vistas permanecen en chunks diferidos.
 - No se afirma una puntuación concreta de Lighthouse: debe medirse en el hosting final, con URLs y activos reales.
 - No se recibieron URLs oficiales de Facebook o YouTube, ni videos o testimonios autorizados. Los enlaces provisionales y colecciones vacías evitan inventar datos.
 - El sitio abre WhatsApp con el borrador; la persona usuaria debe confirmar el envío.
