@@ -17,9 +17,10 @@ export class EmilianoInvitationComponent {
   readonly selectedPhoto = signal<EventPhoto | null>(null);
   readonly attempted = signal(false);
   readonly complete = signal(false);
+  readonly shortDate = computed(() => this.formatShortDate(this.config().date));
   readonly gallerySlots = computed(() => {
-    const photos = this.config().gallery.filter((photo) => photo.src).slice(0, 2);
-    return Array.from({ length: 2 }, (_, index) => ({
+    const photos = this.config().gallery.filter((photo) => photo.src);
+    return Array.from({ length: Math.max(4, photos.length) }, (_, index) => ({
       index,
       photo: photos[index] ?? null,
     }));
@@ -59,6 +60,18 @@ export class EmilianoInvitationComponent {
     }).format(new Date(Date.UTC(year, month - 1, day, 12)));
   }
 
+  formatShortDate(value: string): { day: string; month: string } {
+    const [year, month, day] = value.split('-').map(Number);
+    const date = new Date(Date.UTC(year, month - 1, day, 12));
+    return {
+      day: new Intl.DateTimeFormat('es-MX', { day: '2-digit', timeZone: 'UTC' }).format(date),
+      month: new Intl.DateTimeFormat('es-MX', { month: 'short', timeZone: 'UTC' })
+        .format(date)
+        .replace('.', '')
+        .toLocaleUpperCase('es-MX'),
+    };
+  }
+
   showPhoto(photo: EventPhoto): void {
     this.selectedPhoto.set(photo);
   }
@@ -75,13 +88,15 @@ export class EmilianoInvitationComponent {
     const config = this.config();
     const value = this.form.getRawValue();
     const phone = config.rsvp.whatsappNumber?.replace(/\D/g, '') ?? '';
+    const eventName = config.rsvp.eventName || `la celebración de ${config.title}`;
     const message = [
       'Hola.',
-      value.attending === 'yes'
-        ? 'Confirmo asistencia al cumpleaños de Emiliano Ulises.'
-        : 'No podré asistir al cumpleaños de Emiliano Ulises.',
+      '',
+      value.attending === 'yes' ? `Confirmo asistencia al ${eventName}.` : `No podré asistir al ${eventName}.`,
+      '',
       `Nombre: ${value.name.trim()}`,
-      ...(value.attending === 'yes' ? [`Niños: ${value.kids}`] : []),
+      ...(value.attending === 'yes' ? ['', `Niños: ${value.kids}`] : []),
+      '',
       `Comentarios: ${value.comments.trim() || 'Sin comentarios'}`,
     ].join('\n');
 

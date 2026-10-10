@@ -38,7 +38,7 @@ npm run check:config
 npm run build:production
 ```
 
-El build de producción genera `dist/invitation-studio/browser`. Publica su contenido en un hosting estático con fallback SPA a `index.html`, asegurando que JSON e imágenes se sigan sirviendo como archivos. La generación de páginas estáticas de compartición crea metadatos sociales por plantilla.
+El build de producción genera `dist/invitation-studio/browser`. Publica su contenido en un hosting estático con fallback SPA a `index.html`, asegurando que JSON e imágenes se sigan sirviendo como archivos. La generación de páginas estáticas de compartición crea metadatos sociales por plantilla. En un hosting distinto de Vercel, define `INVITATION_SITE_ORIGIN` durante el build para generar URLs absolutas de Open Graph.
 
 ## Estructura del proyecto
 
@@ -60,7 +60,7 @@ docs/                  Guías de arquitectura, operación y soporte
 Los temas disponibles se definen en `src/app/features/themes/theme-registry.service.ts`. Para agregar un evento:
 
 1. Copia `public/config/events/emiliano-ulises.json` con un nuevo `slug`.
-2. Ajusta textos, fecha, ubicación, secciones, RSVP, SEO, imágenes y tema.
+2. Ajusta textos, edad, fecha, ubicación, secciones, RSVP, SEO, imágenes y tema. Las imágenes de galería se sirven desde `public/` para una carga rápida; publica fotos de Pinterest u otros sitios solo si tienes permiso para reutilizarlas.
 3. Añade una entrada correspondiente en `public/config/events/index.json`.
 4. Ejecuta `npm run check:config` y `npm run build:production`.
 

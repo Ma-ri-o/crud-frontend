@@ -5,6 +5,7 @@
   "title": "¡Emiliano Ulises cumple 4 años!",
   "subtitle": "Prepárate para una gran aventura llena de diversión, juegos y sorpresas.",
   "description": "Acompáñanos a celebrar el cumpleaños de Emiliano Ulises en Cocotitlán.",
+  "age": 4,
   "date": "2026-11-14",
   "time": "15:30",
   "timezone": "America/Mexico_City",
@@ -17,11 +18,16 @@
   "hostName": "Familia de Emiliano",
   "sections": { "countdown": true, "story": false, "details": true, "gallery": true, "map": true, "gifts": true, "rsvp": true, "timeline": false, "music": false, "openData": false },
   "story": [],
-  "gallery": [],
+  "gallery": [
+    { "src": "/images/emiliano-ulises/gallery-team.svg", "alt": "Un equipo de pequeños héroes listo para celebrar", "caption": "¡La aventura comienza!", "width": 640, "height": 560 },
+    { "src": "/images/emiliano-ulises/gallery-shield.svg", "alt": "Escudo azul y estrella dorada entre confeti", "caption": "Una misión muy especial", "width": 640, "height": 560 },
+    { "src": "/images/emiliano-ulises/gallery-party.svg", "alt": "Globos de colores y regalos para una fiesta de cumpleaños", "caption": "Juegos, regalos y diversión", "width": 640, "height": 560 },
+    { "src": "/images/emiliano-ulises/gallery-sidekick.svg", "alt": "Un simpático compañero amarillo con antifaz de héroe", "caption": "¡Todos al equipo!", "width": 640, "height": 560 }
+  ],
   "timeline": [],
   "music": { "enabled": false, "src": "", "title": "Música de la celebración" },
   "gifts": { "enabled": true, "message": "Tu compañía es nuestro mejor regalo.", "links": [] },
-  "rsvp": { "enabled": true, "whatsappNumber": "5215658572679", "fields": ["name", "attending", "guests", "comments"], "successMessage": "Confirma tu asistencia por WhatsApp. ¡Nos vemos en la aventura!" },
+  "rsvp": { "enabled": true, "whatsappNumber": "5215658572679", "eventName": "cumpleaños de Emiliano Ulises", "fields": ["name", "attending", "guests", "comments"], "successMessage": "Confirma tu asistencia por WhatsApp. ¡Nos vemos en la aventura!" },
   "openData": { "enabled": false, "jikan": false, "pokeApi": false },
   "seo": { "title": "Cumpleaños de Emiliano Ulises", "description": "Acompáñanos a celebrar el cumpleaños de Emiliano Ulises en Cocotitlán.", "image": "/images/emiliano-ulises/social-card.png" }
 }

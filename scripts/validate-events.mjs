@@ -13,6 +13,16 @@ for (const entry of index.templates ?? []) {
   }
   if (event.slug !== entry.slug) throw new Error(`${entry.slug}: el slug del JSON no coincide`);
   if (!Array.isArray(event.gallery) || !Array.isArray(event.story) || !Array.isArray(event.timeline)) throw new Error(`${entry.slug}: story, gallery y timeline deben ser arreglos`);
+  for (const photo of event.gallery) {
+    if (photo.src?.startsWith('/') && !photo.src.startsWith('//')) {
+      const asset = new URL(`../public${photo.src}`, import.meta.url);
+      try {
+        await readFile(asset);
+      } catch {
+        throw new Error(`${entry.slug}: no se encuentra la imagen de galería ${photo.src}`);
+      }
+    }
+  }
 }
 const files = (await readdir(root)).filter((file) => file.endsWith('.json') && file !== 'index.json');
 for (const file of files) if (!slugs.has(file.slice(0,-5))) throw new Error(`Configuración fuera del catálogo: ${file}`);

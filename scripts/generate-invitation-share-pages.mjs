@@ -52,6 +52,7 @@ for (const template of catalog.templates ?? []) {
     ['name|description', description],
     ['property|og:title', title],
     ['property|og:description', description],
+    ['property|og:site_name', event.hostName || title],
     ['property|og:url', eventUrl],
     ['name|twitter:title', title],
     ['name|twitter:description', description],

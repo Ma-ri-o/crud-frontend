@@ -17,7 +17,10 @@
       <span class="brand-shield" aria-hidden="true">★</span>
       <span>INVITACIÓN ESPECIAL<small>FAMILIA DE EMILIANO</small></span>
     </a>
-    <a class="header-date" href="#detalles">14 NOV <span>2026</span></a>
+    <a class="header-date" href="#detalles">
+      {{ shortDate().day }} {{ shortDate().month }}
+      <span>{{ config().date.slice(0, 4) }}</span>
+    </a>
   </header>
 
   <div id="party-main">
@@ -29,7 +32,7 @@
         <h1 id="party-title">{{ config().title }}</h1>
         <p class="hero-subtitle">{{ config().subtitle }}</p>
         <div class="hero-tags" aria-label="Datos del festejo">
-          <span>✦ NIVEL 4 DESBLOQUEADO</span>
+          @if (config().age) { <span>✦ NIVEL {{ config().age }} DESBLOQUEADO</span> }
           <span>★ UNA MISIÓN INOLVIDABLE</span>
         </div>
         <a class="party-button hero-cta" href="#confirmar">
@@ -41,9 +44,9 @@
         <span class="art-orbit orbit-a" aria-hidden="true"></span>
         <span class="art-orbit orbit-b" aria-hidden="true"></span>
         <img ngSrc="/images/emiliano-ulises/hero.svg" width="760" height="820" priority
-          alt="Ilustración de un pequeño superhéroe listo para celebrar su cumpleaños">
+          alt="Un pequeño superhéroe y su compañero amarillo original listos para celebrar">
         <span class="hero-sticker sticker-top" aria-hidden="true">POW!</span>
-        <span class="hero-sticker sticker-bottom" aria-hidden="true">4★</span>
+        @if (config().age) { <span class="hero-sticker sticker-bottom" aria-hidden="true">{{ config().age }}★</span> }
       </div>
       <a class="scroll-cue" href="#cuenta-regresiva">DESCUBRE LA MISIÓN <span aria-hidden="true">↓</span></a>
     </section>
@@ -91,12 +94,18 @@
     }
 
     @if (config().sections.gallery) {
-      <section class="party-gallery section-shell" aria-label="Fotografías de la celebración">
+      <section class="party-gallery section-shell" aria-labelledby="gallery-title">
+        <div class="section-heading">
+          <p class="section-kicker">EL EQUIPO DE LA AVENTURA</p>
+          <h2 id="gallery-title">Héroes, diversión y muchas sorpresas</h2>
+          <p>Un adelanto de la misión que celebraremos juntos.</p>
+        </div>
         <div class="gallery-grid">
           @for (slot of gallerySlots(); track slot.index) {
             @if (slot.photo; as photo) {
               <button class="gallery-card" type="button" (click)="showPhoto(photo)" [attr.aria-label]="'Ampliar: ' + photo.alt">
-                <img [ngSrc]="photo.src" width="640" height="480" loading="lazy" [alt]="photo.alt">
+                <img [ngSrc]="photo.src" [width]="photo.width || 640" [height]="photo.height || 560"
+                  loading="lazy" [alt]="photo.alt">
                 @if (photo.caption) { <span>{{ photo.caption }}</span> }
                 <i aria-hidden="true">↗</i>
               </button>
@@ -125,7 +134,7 @@
           </label>
           <label>
             ¿Asistirás?
-            <select formControlName="attending">
+            <select formControlName="attending" [attr.aria-invalid]="attempted() && form.controls.attending.invalid">
               <option value="">Selecciona una respuesta</option>
               <option value="yes">¡Sí, ahí estaré!</option>
               <option value="no">Esta vez no podré</option>
@@ -133,7 +142,7 @@
           </label>
           @if (form.controls.attending.value === 'yes') {
             <label>
-              Niños que te acompañan
+              Número de niños
               <input type="number" formControlName="kids" min="0" max="20" inputmode="numeric">
             </label>
           }
@@ -173,7 +182,7 @@
           <p>{{ config().address }}</p>
         </div>
         <div class="map-frame">
-          <iframe [src]="mapEmbedUrl()" title="Mapa de Salón de Eventos Zaragoza en Cocotitlán"
+          <iframe [src]="mapEmbedUrl()" [title]="'Mapa de ' + config().location + ' en ' + config().address"
             loading="lazy" referrerpolicy="no-referrer-when-downgrade"
             allowfullscreen></iframe>
         </div>
