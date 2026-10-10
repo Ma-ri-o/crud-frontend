@@ -5,13 +5,14 @@ import { catchError, from, map, of, switchMap } from 'rxjs';
 import { EventConfigService } from '../../core/event-config.service';
 import { EventConfig } from '../../core/invitation.models';
 import { SeoService } from '../../core/seo.service';
+import { EmilianoInvitationComponent } from './emiliano-invitation.component';
 import { InvitationViewComponent } from './invitation-view.component';
 @Component({
   selector: 'is-event-page',
   standalone: true,
-  imports: [InvitationViewComponent],
+  imports: [InvitationViewComponent, EmilianoInvitationComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `@if(event();as config){<is-invitation-view [config]="config"/>}@else if(error()){<main class="event-load-error"><div><span>✦</span><h1>No encontramos esta invitación</h1><p>{{error()}}</p><a href="/">Volver a Invitation Studio</a></div></main>}@else{<main class="event-loading" aria-live="polite">Preparando una celebración…</main>}`,
+  template: `@if(event();as config){@if(config.slug==='emiliano-ulises'){<is-emiliano-invitation [config]="config"/>} @else {<is-invitation-view [config]="config"/>}}@else if(error()){<main class="event-load-error"><div><span>✦</span><h1>No encontramos esta invitación</h1><p>{{error()}}</p><a href="/">Volver a Invitation Studio</a></div></main>}@else{<main class="event-loading" aria-live="polite">Preparando una celebración…</main>}`,
 })
 export class EventPageComponent {
   readonly event = signal<EventConfig | null>(null);

@@ -16,7 +16,7 @@ El formato vigente es `schemaVersion: 1`. El tipo TypeScript aporta seguridad du
 | --- | --- | --- |
 | `schemaVersion` | entero literal | Obligatorio; debe ser `1`. |
 | `slug` | string | Obligatorio; `^[a-z0-9-]{1,64}$`; coincide con catálogo y archivo. |
-| `eventType` | enum | `birthday`, `wedding`, `anniversary`, `graduation`, `commercial`, `custom`. |
+| `eventType` | enum | `birthday`, `wedding`, `anniversary`, `graduation`, `custom`. |
 | `title`, `subtitle`, `description` | string | Presentación y texto de descripción. |
 | `date` | string | `YYYY-MM-DD` o vacío. |
 | `time` | string | `HH:mm` 24 horas o vacío. |
@@ -48,16 +48,6 @@ La configuración íntegra, que evita duplicar aquí todos los campos, está en 
 - Countdown deshabilitado hasta completar la fecha.
 - RSVP habilitado, con nombre/asistencia y campos opcionales de acompañantes/comentarios.
 - El mensaje RSVP deja claro que el usuario debe enviar la respuesta por WhatsApp; no hay persistencia en servidor.
-
-## Ejemplo: Mariachi Mexicanísimo
-
-Consulta [`mariachi-mexicanisimo.json`](../public/config/events/mariachi-mexicanisimo.json):
-
-- `eventType: "commercial"` y `theme: "mexican"`.
-- Sobrescribe colores mediante `colors`.
-- Usa recursos bajo `/images/mariachi/`.
-- Activa historia, detalles y galería; desactiva el RSVP de invitación.
-- Su información comercial debe revisarse con el negocio antes de publicar.
 
 ## Flags, secciones y campos dinámicos
 

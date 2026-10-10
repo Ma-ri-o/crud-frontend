@@ -2,7 +2,7 @@
 
 ## Decisiones
 
-- Se extiende el workspace Angular standalone existente; la página Mariachi queda disponible en `/mariachi`.
+- El workspace Angular standalone sirve el estudio y las invitaciones configuradas.
 - El runtime lee contratos `EventConfig` desde `public/config/events/<slug>.json`; ningún dato principal del evento se acopla al renderer.
 - El catálogo `index.json` se mantiene junto a las configuraciones y la validación reproducible revisa que ambos estén sincronizados.
 - Angular Signals administran selección, estado de carga, formularios de editor y tokens; Router carga vistas por ruta bajo demanda.

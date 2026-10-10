@@ -24,7 +24,7 @@ No colocar acceso a APIs en componentes de presentación si existe un servicio d
 ## Naming y formato
 
 - Archivos Angular en kebab-case y sufijo descriptivo (`*.component.ts`, `*.service.ts`).
-- Componentes prefijados `is-` para Invitation Studio; conservar prefijo existente en la landing Mariachi.
+- Componentes prefijados `is-` para Invitation Studio.
 - Identificadores de evento en minúsculas y guiones.
 - Tipos de contrato compartidos en `core/invitation.models.ts`.
 - Mantener idioma/copy del producto en español y documentar decisiones técnicas en español, como esta guía.

@@ -1,5 +1,5 @@
 {
-  "name": "mariachi-mexicanisimo",
+  "name": "invitation-studio",
   "version": "2.0.0",
   "private": true,
   "description": "Invitation Studio: plataforma Angular para invitaciones digitales configurables",
@@ -10,8 +10,8 @@
   "scripts": {
     "start": "ng serve",
     "serve": "ng serve",
-    "build": "ng build",
-    "build:production": "ng build --configuration production",
+    "build": "ng build && node scripts/generate-invitation-share-pages.mjs",
+    "build:production": "ng build --configuration production && node scripts/generate-invitation-share-pages.mjs",
     "analyze": "ng build --stats-json",
     "check:config": "node scripts/validate-events.mjs"
   },

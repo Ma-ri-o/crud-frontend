@@ -42,8 +42,6 @@ Campos actuales de `ThemeDefinition`: `id`, `name`, `mood`, `background`, `surfa
 
 Las categorías Minions y Superhéroes ya existen como paletas genéricas. Pokémon, Naruto y Dragon Ball no son temas registrados. Se puede implementar una atmósfera original basada en color/composición, pero logos, personajes, capturas, tipografías distintivas y música requieren derechos/licencias adecuados. El repositorio no incluye assets oficiales de esas franquicias. Para publicación comercial usa recursos propios, de dominio/licencia compatible o con autorización expresa.
 
-Mariachi se representa con el tema existente `mexican` y la plantilla comercial. No es necesario crear un tema nuevo para cambiar el contenido de la plantilla.
-
 ## Assets e imágenes
 
 `assets/themes/` **no existe actualmente**. El proyecto sirve estáticos desde `public/`; conserva el patrón actual o acuerda una migración antes de moverlo. Una organización posible para una futura ampliación:
@@ -56,7 +54,6 @@ public/
 │   │       ├── hero.webp
 │   │       └── detail-01.webp
 │   ├── events/
-│   └── mariachi/
 └── music/
 ```
 

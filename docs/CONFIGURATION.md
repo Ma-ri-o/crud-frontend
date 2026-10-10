@@ -29,7 +29,7 @@ Un borrador local puede ocultar temporalmente el JSON recién publicado en ese n
 | `mapUrl` | URL que abre ubicación externa. | string | Sí por modelo | URL de búsqueda de Maps |
 | `theme` | Identificador existente en el registro de temas. | `ThemeId` | Sí | `"kids"` |
 | `colors` | Overrides de tokens de color. | objeto opcional | No | `{"primary":"#174d3a"}` |
-| `heroImage` | Ruta pública/URL de la imagen principal. | string opcional | No | `"/images/mariachi/mariachi-presentacion.jpeg"` |
+| `heroImage` | Ruta pública/URL de la imagen principal. | string opcional | No | `"/images/events/portada.webp"` |
 | `hostName` | Anfitrión o entidad comercial. | string | Sí por modelo | `"Familia de Emiliano"` |
 | `sections` | Flags para mostrar secciones. Ver tabla de secciones. | objeto booleano | Sí | Detalles y RSVP según evento |
 | `story` | Lista de bloques de historia. | `EventStory[]` | Sí, arreglo | `[]` |

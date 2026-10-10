@@ -3,16 +3,16 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "mariachi-mexicanisimo": {
+    "invitation-studio": {
       "projectType": "application",
       "root": "",
       "sourceRoot": "src",
-      "prefix": "mm",
+      "prefix": "is",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/mariachi-mexicanisimo",
+            "outputPath": "dist/invitation-studio",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -61,10 +61,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "mariachi-mexicanisimo:build:production"
+              "buildTarget": "invitation-studio:build:production"
             },
             "development": {
-              "buildTarget": "mariachi-mexicanisimo:build:development"
+              "buildTarget": "invitation-studio:build:development"
             }
           },
           "defaultConfiguration": "development"

@@ -1,0 +1,32 @@
+.emiliano-invitation .gallery-grid {
+  max-width: 760px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(.75rem, 3vw, 1.5rem);
+}
+
+.emiliano-invitation .gallery-card,
+.emiliano-invitation .gallery-card:nth-child(4) {
+  grid-column: auto;
+}
+
+.emiliano-invitation .gallery-placeholder {
+  display: grid;
+  aspect-ratio: 1.12;
+  place-items: center;
+  border: 2px dashed #9aabc2;
+  border-radius: 18px;
+  color: #526987;
+  background: linear-gradient(135deg, #eef3fa, #f9fbfe);
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: 300;
+}
+
+.emiliano-invitation .gallery-placeholder > span {
+  display: grid;
+  width: 68px;
+  height: 68px;
+  place-items: center;
+  border: 1px solid #cbd6e5;
+  border-radius: 50%;
+  background: #ffffffa8;
+}

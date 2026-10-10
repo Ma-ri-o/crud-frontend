@@ -1,171 +1,99 @@
 # Invitation Studio
 
-Invitation Studio es un motor web de invitaciones digitales basado en Angular. Permite publicar experiencias para eventos usando configuraciones JSON, un editor visual, temas compartidos y componentes reutilizables. El objetivo es que el contenido y la composición de una invitación se puedan adaptar sin duplicar una página Angular por evento.
-
-La aplicación también conserva una landing comercial para Mariachi Mexicanísimo y sirve como plantilla de negocio dentro del mismo proyecto.
+Invitation Studio es una aplicación Angular para crear, previsualizar y publicar invitaciones digitales configurables. La información del evento vive en archivos JSON; el estudio permite editar una plantilla sin modificar el código de la aplicación.
 
 ## Casos de uso
 
-- Cumpleaños, bautizos, XV años, bodas, aniversarios y graduaciones.
-- Invitaciones para eventos corporativos y celebraciones familiares.
-- Landing pages comerciales, incluida la plantilla de Mariachi Mexicanísimo.
-- Invitaciones temáticas con paletas y tipografías configurables.
-- Contenido opcional relacionado con anime (Jikan) y Pokémon (PokéAPI).
+- Cumpleaños y celebraciones familiares
+- Bodas, bautizos, graduaciones y aniversarios
+- Invitaciones temáticas y páginas de evento
 
-Anime y Pokémon se ofrecen como integraciones de datos opcionales, no como plantillas gráficas incluidas. El proyecto no contiene imágenes o música oficiales de franquicias; antes de publicar contenido de terceros, verifica licencias y permisos.
+La configuración actual de ejemplo es el cumpleaños de Emiliano Ulises en Cocotitlán, Estado de México.
 
 ## Tecnologías
 
-- Angular 22.2, Angular Router y Angular Service Worker.
-- TypeScript 6 y SCSS.
-- Standalone Components, Signals y change detection `OnPush`.
-- RxJS para peticiones HTTP y composición de flujos.
-- Reactive Forms para el formulario RSVP.
-- JSON estático como contrato de configuración.
+- Angular 22 y TypeScript
+- Standalone Components, Signals y Router con carga lazy
+- SCSS, formularios reactivos y RxJS
+- Service Worker para capacidades PWA
 
 ## Requisitos
 
-- Node.js `^22.22.3 || ^24.15.0 || ^26.0.0`.
-- npm `>=10`.
+- Node.js compatible con el campo `engines` de [package.json](./package.json)
+- npm 10 o superior
 
-Las versiones de Angular y Node deben seguir la [tabla de compatibilidad de Angular](https://angular.dev/reference/versions). El proyecto fija Angular 22.2.2 y TypeScript 6 en sus manifiestos.
-
-## Instalación y ejecución local
-
-Desde la raíz del repositorio:
+## Instalación y ejecución
 
 ```bash
 npm ci
 npm start
 ```
 
-Abre `http://localhost:4200`. El servidor de desarrollo usa la configuración `development`; el Service Worker no se habilita durante desarrollo.
+Abre `http://localhost:4200`. La ruta raíz abre el estudio y `/i/emiliano-ulises` muestra la invitación.
 
-## Build y producción
+## Validación y build
 
 ```bash
-npm run build                 # build según la configuración predeterminada
-npm run build:production      # build de producción con hashing y Service Worker
-npm run check:config          # verifica catálogo y archivos JSON
-npm run analyze               # genera build con stats JSON
+npm run check:config
+npm run build:production
 ```
 
-El resultado de producción se genera en `dist/mariachi-mexicanisimo/browser`. Publica el contenido de esa carpeta en un hosting estático y configura un fallback de rutas SPA a `index.html`, sin interceptar los archivos estáticos existentes. Ejemplos de configuración del repositorio: [`vercel.json`](./vercel.json), [`public/_redirects`](./public/_redirects) y [`public/staticwebapp.config.json`](./public/staticwebapp.config.json).
-
-La aplicación no incluye SSR. Las etiquetas SEO de cada invitación se actualizan en cliente; valida el comportamiento del crawler y configura SSR/prerender si la plataforma necesita HTML y metadata por slug antes de ejecutar JavaScript. En producción se requiere HTTPS para PWA, QR y enlaces externos confiables.
-
-## Rutas de aplicación
-
-| Ruta | Uso |
-| --- | --- |
-| `/` | Catálogo y página inicial de Invitation Studio. |
-| `/studio` | Editor de plantillas, configuración JSON e importación/exportación. |
-| `/i/:slug` | Invitación que carga `public/config/events/:slug.json`. |
-| `/mariachi` | Landing comercial de Mariachi Mexicanísimo. |
-| `/galeria`, `/contacto`, `/reservar` | Páginas comerciales existentes. |
-
-Las rutas cargan componentes con `loadComponent` para mantener las páginas feature en chunks lazy.
+El build de producción genera `dist/invitation-studio/browser`. Publica su contenido en un hosting estático con fallback SPA a `index.html`, asegurando que JSON e imágenes se sigan sirviendo como archivos. La generación de páginas estáticas de compartición crea metadatos sociales por plantilla.
 
 ## Estructura del proyecto
 
 ```text
-src/app/
-├── core/                 modelos, carga/validación de configuración, SEO y APIs
-├── features/
-│   ├── studio/           catálogo y editor visual/JSON
-│   ├── invitation/       carga por slug, renderer, countdown
-│   ├── themes/           registro de temas y tokens CSS
-│   ├── integrations/     interfaz opcional para APIs abiertas
-│   ├── home/             landing comercial de Mariachi
-│   ├── gallery/
-│   ├── contact/
-│   └── booking/
-├── app.routes.ts         rutas lazy
-└── main.ts               bootstrap, HTTP, router y Service Worker
 public/
-├── config/events/        catálogo y JSON publicables
-├── images/               fotografías de plantillas
-├── music/                ubicación para audio autorizado
-├── icons/
-└── manifest.webmanifest
-docs/                     arquitectura, configuración, soporte y operación
-scripts/                  validación local de configuraciones
+  config/events/       Configuración JSON y catálogo
+  images/              Imágenes locales
+src/app/
+  core/                Contratos, carga de datos y servicios
+  features/studio/     Catálogo y editor
+  features/invitation/ Renderizadores genéricos y específicos
+  features/themes/     Registro de temas y tokens
+scripts/               Validación y generación de páginas compartibles
+docs/                  Guías de arquitectura, operación y soporte
 ```
 
-## Plantillas incluidas
+## Temas y personalización
 
-- [`emiliano-ulises.json`](./public/config/events/emiliano-ulises.json): cumpleaños en Cocotitlán, Estado de México. Fecha, hora y dirección exacta permanecen vacías hasta recibir datos confirmados.
-- [`mariachi-mexicanisimo.json`](./public/config/events/mariachi-mexicanisimo.json): plantilla comercial con fotografías locales. Confirma con el negocio que la información de contacto, servicios y recursos siga vigente antes de publicar.
+Los temas disponibles se definen en `src/app/features/themes/theme-registry.service.ts`. Para agregar un evento:
 
-El catálogo está en [`public/config/events/index.json`](./public/config/events/index.json). La guía para cada propiedad, validación y defaults está en [Configuración](./docs/CONFIGURATION.md) y [Contrato JSON](./docs/JSON-SCHEMA.md).
+1. Copia `public/config/events/emiliano-ulises.json` con un nuevo `slug`.
+2. Ajusta textos, fecha, ubicación, secciones, RSVP, SEO, imágenes y tema.
+3. Añade una entrada correspondiente en `public/config/events/index.json`.
+4. Ejecuta `npm run check:config` y `npm run build:production`.
 
-## Temas disponibles
+Los cambios temporales del editor se guardan en el almacenamiento local del navegador. Para publicar, incorpora el JSON y recursos al repositorio y despliega el build; el guardado local no publica cambios.
 
-El registro actual ofrece `elegant`, `luxury`, `floral`, `kids`, `minions`, `superheroes`, `princess`, `space`, `safari` y `mexican`. Los temas comparten un renderer y aportan una paleta, tipografías seguras y decoración; `colors` permite overrides por invitación.
+Consulta [docs/CONFIGURATION.md](./docs/CONFIGURATION.md), [docs/JSON-SCHEMA.md](./docs/JSON-SCHEMA.md), [docs/THEMES.md](./docs/THEMES.md) y [docs/OPERATIONS.md](./docs/OPERATIONS.md).
 
-Cambiar de tema existente se hace desde el editor o desde `theme` en el JSON. Añadir un nuevo identificador aún requiere actualizar TypeScript y el registro. Consulta [Temas](./docs/THEMES.md) antes de extenderlo.
+## Solución de problemas
 
-## Personalización básica
-
-1. Abre `/studio` y elige una plantilla o crea un evento.
-2. Edita el contenido, los colores, las secciones, el RSVP y las rutas de recursos.
-3. Guarda una vista previa en el navegador y prueba `/i/:slug`.
-4. Descarga el JSON, colócalo en `public/config/events/<slug>.json` y agrega el resumen a `index.json`.
-5. Copia imágenes y audio con permiso a `public/`, valida referencias y ejecuta:
-
-   ```bash
-   npm run check:config
-   npm run build:production
-   ```
-
-6. Revisa rutas directas, enlaces, dispositivos móviles, accesibilidad y comportamiento offline; después publica el build.
-
-Guardar vista previa solo utiliza `localStorage` de ese navegador. Exportar no publica archivos por sí solo. RSVP tampoco persiste en un servidor: se muestra una respuesta y, si hay teléfono, una persona puede abrir WhatsApp y enviarla.
-
-## Solución rápida de problemas
-
-| Síntoma | Primer diagnóstico |
-| --- | --- |
-| El catálogo o la invitación no abre | Comprueba el fallback SPA, el `slug`, la ruta JSON y la pestaña Network del navegador. |
-| La plantilla falla al publicar | Ejecuta `npm run check:config`; compara el nombre de archivo, `slug` y entrada del catálogo. |
-| Una imagen o audio no aparece | Confirma el archivo bajo `public/`, la URL pública absoluta `/...` y mayúsculas/minúsculas. |
-| No aparece el countdown | `sections.countdown` debe ser `true` y `date` no puede estar vacía. |
-| WhatsApp no se abre | Configura un número con código de país y dígitos solamente; el envío requiere una acción del invitado. |
-| El QR no carga | La imagen depende del servicio externo QRServer y de conectividad; prueba la URL pública en una pestaña privada. |
-
-La guía completa de soporte y diagnóstico está en [Support](./docs/SUPPORT.md) y [Runbook](./docs/RUNBOOK.md).
+- **La invitación no carga:** comprueba que el `slug` exista en catálogo y JSON y revisa Network/Console.
+- **La validación falla:** ejecuta `npm run check:config` para localizar errores de esquema o recursos.
+- **No se ven cambios publicados:** elimina el borrador de vista previa local o usa la acción de restaurar publicada.
+- **El build falla:** confirma la versión de Node.js, ejecuta `npm ci` y revisa el primer error de Angular/TypeScript.
+- **No aparecen metadatos al compartir:** vuelve a generar el build y confirma que el hosting sirve el HTML generado.
 
 ## FAQ
 
-**¿Puedo crear una invitación nueva sin programar?**
+**¿Se guardan las respuestas RSVP en el servidor?** No. La invitación prepara un mensaje para enviar por WhatsApp; no hay backend ni almacenamiento central.
 
-Sí: edita o crea un borrador en `/studio`, valida y exporta el JSON. Publicarlo requiere agregarlo al catálogo, ponerlo en el repositorio y desplegar.
+**¿El editor publica automáticamente?** No. El editor guarda una vista previa local o permite descargar JSON. La publicación requiere actualizar el catálogo/configuración y desplegar.
 
-**¿Las respuestas RSVP se guardan?**
+**¿Puedo usar fotos o música de terceros?** Solo si cuentas con autorización o una licencia compatible con su distribución.
 
-No. El formulario se valida en el navegador. El usuario puede abrir WhatsApp con un mensaje preparado; se requiere backend para persistencia central.
-
-**¿Puedo agregar temas sin cambios de código?**
-
-Se pueden elegir los temas existentes y personalizar sus colores desde JSON. Registrar un tema nuevo requiere cambiar el tipo `ThemeId`, el allowlist de validación y `THEME_REGISTRY`.
-
-**¿El QR y las APIs funcionan offline?**
-
-El QR remoto y las llamadas a APIs requieren internet. El Service Worker puede cachear respuestas y recursos según su configuración, pero no se debe asumir que todo recurso externo estará disponible offline.
-
-**¿SSR está habilitado?**
-
-No en la configuración actual. SEO se actualiza en cliente. Consulta [Arquitectura](./docs/ARCHITECTURE.md) para la implicación y posibles siguientes pasos.
+**¿Hay SSR?** No está configurado actualmente; el producto usa una SPA y genera HTML estático con metadatos de compartición.
 
 ## Documentación
 
 - [Arquitectura](./docs/ARCHITECTURE.md)
-- [Configuración de invitaciones](./docs/CONFIGURATION.md)
-- [Contrato y ejemplos JSON](./docs/JSON-SCHEMA.md)
-- [Temas y recursos visuales](./docs/THEMES.md)
-- [APIs open source](./docs/OPEN-DATA.md)
-- [Soporte técnico](./docs/SUPPORT.md)
-- [Operación y publicación](./docs/OPERATIONS.md)
-- [Guía de desarrollo](./docs/DEVELOPMENT.md)
-- [Runbook de soporte](./docs/RUNBOOK.md)
-- [Documentación de arquitectura previa](./docs/architecture/)
+- [Configuración](./docs/CONFIGURATION.md)
+- [Esquema JSON](./docs/JSON-SCHEMA.md)
+- [Temas](./docs/THEMES.md)
+- [Integraciones de datos abiertos](./docs/OPEN-DATA.md)
+- [Soporte](./docs/SUPPORT.md)
+- [Operaciones](./docs/OPERATIONS.md)
+- [Desarrollo](./docs/DEVELOPMENT.md)
+- [Runbook](./docs/RUNBOOK.md)

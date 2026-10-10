@@ -65,4 +65,4 @@ Checklist operacional:
 - [ ] Se probó actualización PWA, caché y ruta offline esperada.
 - [ ] Se comunicó que RSVP no se guarda y que QR/APIs requieren servicios externos.
 
-Despliega `dist/mariachi-mexicanisimo/browser` con fallback SPA. Asegura que JSON/media responden como archivos y no con HTML fallback. Después verifica logs/Network y conserva el identificador del despliegue. Para rollback restaura deployment/commit anterior; evita reemplazar assets de un build activo manualmente sin invalidar cache.
+Despliega `dist/invitation-studio/browser` con fallback SPA. Asegura que JSON/media responden como archivos y no con HTML fallback. Después verifica logs/Network y conserva el identificador del despliegue. Para rollback restaura deployment/commit anterior; evita reemplazar assets de un build activo manualmente sin invalidar cache.

@@ -1,0 +1,203 @@
+<main class="emiliano-invitation" [style.--party-primary]="config().colors?.primary || '#C62828'"
+  [style.--party-yellow]="config().colors?.accent || '#FFD54F'"
+  [style.--party-blue]="'#1565C0'"
+  (keydown.escape)="closePhoto()">
+  <a class="skip-link" href="#party-main">Saltar al contenido principal</a>
+
+  <div class="confetti" aria-hidden="true">
+    @for (piece of confetti; track $index) {
+      <span [style.left]="piece.left" [style.animation-delay]="piece.delay"
+        [style.animation-duration]="piece.duration" [style.background]="piece.color"
+        [style.rotate]="piece.rotation"></span>
+    }
+  </div>
+
+  <header class="party-header">
+    <a class="party-brand" href="#party-main" aria-label="Cumpleaños de Emiliano Ulises, inicio">
+      <span class="brand-shield" aria-hidden="true">★</span>
+      <span>INVITACIÓN ESPECIAL<small>FAMILIA DE EMILIANO</small></span>
+    </a>
+    <a class="header-date" href="#detalles">14 NOV <span>2026</span></a>
+  </header>
+
+  <div id="party-main">
+    <section class="party-hero" aria-labelledby="party-title">
+      <div class="hero-burst burst-one" aria-hidden="true"></div>
+      <div class="hero-burst burst-two" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <p class="eyebrow"><span aria-hidden="true">✦</span> ¡ATENCIÓN, EQUIPO!</p>
+        <h1 id="party-title">{{ config().title }}</h1>
+        <p class="hero-subtitle">{{ config().subtitle }}</p>
+        <div class="hero-tags" aria-label="Datos del festejo">
+          <span>✦ NIVEL 4 DESBLOQUEADO</span>
+          <span>★ UNA MISIÓN INOLVIDABLE</span>
+        </div>
+        <a class="party-button hero-cta" href="#confirmar">
+          Confirmar asistencia <span aria-hidden="true">↗</span>
+        </a>
+        <p class="hero-host">Con mucho cariño, {{ config().hostName }}</p>
+      </div>
+      <div class="hero-art">
+        <span class="art-orbit orbit-a" aria-hidden="true"></span>
+        <span class="art-orbit orbit-b" aria-hidden="true"></span>
+        <img ngSrc="/images/emiliano-ulises/hero.svg" width="760" height="820" priority
+          alt="Ilustración de un pequeño superhéroe listo para celebrar su cumpleaños">
+        <span class="hero-sticker sticker-top" aria-hidden="true">POW!</span>
+        <span class="hero-sticker sticker-bottom" aria-hidden="true">4★</span>
+      </div>
+      <a class="scroll-cue" href="#cuenta-regresiva">DESCUBRE LA MISIÓN <span aria-hidden="true">↓</span></a>
+    </section>
+
+    @if (config().sections.countdown && config().date) {
+      <section class="party-countdown" id="cuenta-regresiva" aria-labelledby="countdown-title">
+        <p class="section-kicker">LA AVENTURA COMIENZA EN</p>
+        <h2 id="countdown-title">¡Comienza la cuenta regresiva!</h2>
+        <is-countdown [date]="config().date" [time]="config().time" [timezone]="config().timezone" />
+        <p class="countdown-date">{{ formatDate(config().date) }} · {{ config().time }} h</p>
+      </section>
+    }
+
+    @if (config().sections.details) {
+      <section class="party-details section-shell" id="detalles" aria-labelledby="details-title">
+        <div class="section-heading">
+          <p class="section-kicker">PREPARA TU SUPERPODER</p>
+          <h2 id="details-title">La misión está por comenzar</h2>
+          <p>Guarda los detalles y acompáñanos a celebrar.</p>
+        </div>
+        <div class="detail-grid">
+          <article class="detail-card">
+            <span class="detail-icon" aria-hidden="true">◷</span>
+            <p>FECHA</p>
+            <h3>{{ formatDate(config().date) }}</h3>
+            <small>Una tarde llena de diversión</small>
+          </article>
+          <article class="detail-card">
+            <span class="detail-icon" aria-hidden="true">◴</span>
+            <p>HORA</p>
+            <h3>{{ config().time }} hrs</h3>
+            <small>¡Te esperamos puntual!</small>
+          </article>
+          <article class="detail-card venue-card">
+            <span class="detail-icon" aria-hidden="true">⌖</span>
+            <p>LUGAR</p>
+            <h3>{{ config().location }}</h3>
+            <small>{{ config().address }}</small>
+          </article>
+        </div>
+        <a class="party-button map-cta" [href]="config().mapUrl" target="_blank" rel="noopener noreferrer">
+          Cómo llegar <span aria-hidden="true">↗</span>
+        </a>
+      </section>
+    }
+
+    @if (config().sections.gallery) {
+      <section class="party-gallery section-shell" aria-label="Fotografías de la celebración">
+        <div class="gallery-grid">
+          @for (slot of gallerySlots(); track slot.index) {
+            @if (slot.photo; as photo) {
+              <button class="gallery-card" type="button" (click)="showPhoto(photo)" [attr.aria-label]="'Ampliar: ' + photo.alt">
+                <img [ngSrc]="photo.src" width="640" height="480" loading="lazy" [alt]="photo.alt">
+                @if (photo.caption) { <span>{{ photo.caption }}</span> }
+                <i aria-hidden="true">↗</i>
+              </button>
+            } @else {
+              <div class="gallery-placeholder" role="img" [attr.aria-label]="'Espacio reservado para fotografía ' + (slot.index + 1)">
+                <span aria-hidden="true">＋</span>
+              </div>
+            }
+          }
+        </div>
+      </section>
+    }
+
+    @if (config().sections.rsvp && config().rsvp.enabled) {
+      <section class="party-rsvp section-shell" id="confirmar" aria-labelledby="rsvp-title">
+        <div class="rsvp-copy">
+          <p class="section-kicker">¡NECESITAMOS A TU EQUIPO!</p>
+          <h2 id="rsvp-title">¿Te unes a la aventura?</h2>
+          <p>Cuéntanos si podrás venir. Tu respuesta se preparará en WhatsApp para enviarla a la familia.</p>
+          <span class="rsvp-star" aria-hidden="true">★</span>
+        </div>
+        <form class="rsvp-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <label>
+            Tu nombre
+            <input formControlName="name" autocomplete="name" maxlength="100" placeholder="Nombre y apellido">
+          </label>
+          <label>
+            ¿Asistirás?
+            <select formControlName="attending">
+              <option value="">Selecciona una respuesta</option>
+              <option value="yes">¡Sí, ahí estaré!</option>
+              <option value="no">Esta vez no podré</option>
+            </select>
+          </label>
+          @if (form.controls.attending.value === 'yes') {
+            <label>
+              Niños que te acompañan
+              <input type="number" formControlName="kids" min="0" max="20" inputmode="numeric">
+            </label>
+          }
+          <label>
+            Comentarios <span class="optional-label">(opcional)</span>
+            <textarea formControlName="comments" rows="3" maxlength="300" placeholder="Déjale un mensaje a Emiliano"></textarea>
+          </label>
+          @if (attempted() && form.invalid) {
+            <p class="form-feedback form-error" role="alert">Escribe tu nombre y selecciona si asistirás.</p>
+          }
+          @if (complete()) {
+            <p class="form-feedback" role="status">
+              Se abrió WhatsApp con tu mensaje. Revísalo y pulsa <strong>Enviar</strong> para confirmar.
+              <a [href]="responseUrl()" target="_blank" rel="noopener noreferrer">Abrir WhatsApp otra vez</a>
+            </p>
+          }
+          <button class="party-button submit-cta" type="submit">Confirmar por WhatsApp <span aria-hidden="true">↗</span></button>
+          <small>Tus datos se usarán únicamente para preparar el mensaje de confirmación.</small>
+        </form>
+      </section>
+    }
+
+    @if (config().sections.gifts && config().gifts.enabled) {
+      <section class="party-gift" aria-label="Mensaje de regalo">
+        <span aria-hidden="true">🎁</span>
+        <p class="section-kicker">EL MEJOR REGALO</p>
+        <h2>{{ config().gifts.message }}</h2>
+        <p>¡Ven con ganas de jugar y celebrar!</p>
+      </section>
+    }
+
+    @if (config().sections.map && config().mapUrl) {
+      <section class="party-map section-shell" id="mapa" aria-labelledby="map-title">
+        <div class="section-heading">
+          <p class="section-kicker">RUMBO A LA CELEBRACIÓN</p>
+          <h2 id="map-title">Nos vemos en {{ config().location }}</h2>
+          <p>{{ config().address }}</p>
+        </div>
+        <div class="map-frame">
+          <iframe [src]="mapEmbedUrl()" title="Mapa de Salón de Eventos Zaragoza en Cocotitlán"
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
+        </div>
+        <a class="party-button map-cta" [href]="config().mapUrl" target="_blank" rel="noopener noreferrer">
+          Abrir ruta en Google Maps <span aria-hidden="true">↗</span>
+        </a>
+      </section>
+    }
+  </div>
+
+  <footer class="party-footer">
+    <span class="footer-shield" aria-hidden="true">★</span>
+    <p>¡Gracias por acompañarnos!</p>
+    <strong>{{ config().hostName }}</strong>
+    <small>UNA CELEBRACIÓN LLENA DE PODER, AMISTAD Y ALEGRÍA</small>
+  </footer>
+
+  @if (selectedPhoto(); as photo) {
+    <div class="lightbox" role="presentation" (click)="closeOnBackdrop($event)">
+      <dialog class="lightbox-dialog" open aria-modal="true" aria-label="Imagen ampliada" (click)="$event.stopPropagation()">
+        <button class="lightbox-close" type="button" aria-label="Cerrar imagen" (click)="closePhoto()">×</button>
+        <img [src]="photo.src" [alt]="photo.alt">
+        @if (photo.caption) { <p>{{ photo.caption }}</p> }
+      </dialog>
+    </div>
+  }
+</main>

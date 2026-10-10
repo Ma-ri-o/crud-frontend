@@ -16,7 +16,6 @@ export const THEME_REGISTRY: Record<ThemeId, ThemeDefinition> = {
   princess: { id:'princess', name:'Princess', mood:'Dulce y encantador', background:'#fff3f8', surface:'#fffaff', text:'#433044', primary:'#bd78ac', accent:'#ddbd73', muted:'#7c7180', displayFont:'Georgia,serif', bodyFont:'Arial,sans-serif', decoration:'♡' },
   space: { id:'space', name:'Space', mood:'Galáctico y moderno', background:'#0d152b', surface:'#172341', text:'#f5f4ff', primary:'#8475e8', accent:'#59d5d2', muted:'#b3b7d1', displayFont:'Arial,sans-serif', bodyFont:'Arial,sans-serif', decoration:'✧' },
   safari: { id:'safari', name:'Safari', mood:'Natural y aventurero', background:'#f2f0df', surface:'#fffdf0', text:'#333126', primary:'#738149', accent:'#bd8952', muted:'#777463', displayFont:'Georgia,serif', bodyFont:'Arial,sans-serif', decoration:'❋' },
-  mexican: { id:'mexican', name:'Mexicano contemporáneo', mood:'Verde profundo y dorado', background:'#f5f0e6', surface:'#fffdf8', text:'#1d211d', primary:'#174d3a', accent:'#bd8b45', muted:'#6c695f', displayFont:'Georgia,serif', bodyFont:'Arial,sans-serif', decoration:'✺' },
 };
 
 @Injectable({ providedIn: 'root' })

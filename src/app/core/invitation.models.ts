@@ -1,5 +1,5 @@
-export type EventKind = 'birthday' | 'wedding' | 'anniversary' | 'graduation' | 'commercial' | 'custom';
-export type ThemeId = 'elegant' | 'luxury' | 'floral' | 'kids' | 'minions' | 'superheroes' | 'princess' | 'space' | 'safari' | 'mexican';
+export type EventKind = 'birthday' | 'wedding' | 'anniversary' | 'graduation' | 'custom';
+export type ThemeId = 'elegant' | 'luxury' | 'floral' | 'kids' | 'minions' | 'superheroes' | 'princess' | 'space' | 'safari';
 export type SectionId = 'countdown' | 'story' | 'details' | 'gallery' | 'map' | 'gifts' | 'rsvp' | 'timeline' | 'music' | 'openData';
 export interface EventStory { title: string; body: string; date?: string; image?: string; }
 export interface EventPhoto { src: string; alt: string; caption?: string; }

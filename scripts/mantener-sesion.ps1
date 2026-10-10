@@ -5,7 +5,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
-$runtimeDirectory = Join-Path $env:LOCALAPPDATA "MariachiMexicanisimo"
+$runtimeDirectory = Join-Path $env:LOCALAPPDATA "InvitationStudio"
 $statePath = Join-Path $runtimeDirectory "session.json"
 $stopSignalPath = Join-Path $runtimeDirectory "stop.signal"
 
@@ -44,11 +44,11 @@ if (Test-Path $stopSignalPath) {
   Remove-Item -LiteralPath $stopSignalPath
 }
 
-if (-not ("MariachiSession.Power" -as [type])) {
+if (-not ("InvitationStudioSession.Power" -as [type])) {
   Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
-namespace MariachiSession {
+namespace InvitationStudioSession {
   public static class Power {
     [DllImport("kernel32.dll", SetLastError = true)]
     public static extern uint SetThreadExecutionState(uint flags);
@@ -69,17 +69,17 @@ $stdoutPath = Join-Path $runtimeDirectory "dev.stdout.log"
 $stderrPath = Join-Path $runtimeDirectory "dev.stderr.log"
 
 try {
-  if ([MariachiSession.Power]::SetThreadExecutionState($executionState) -eq 0) {
+  if ([InvitationStudioSession.Power]::SetThreadExecutionState($executionState) -eq 0) {
     throw "Windows no permitió activar el modo de pantalla despierta."
   }
 
-  $node = (Get-Command "node.exe" -ErrorAction Stop).Source
-  $nextCli = Join-Path $projectRoot "node_modules\next\dist\bin\next"
-  if (-not (Test-Path $nextCli)) {
-    throw "No se encontraron las dependencias de Next.js. Ejecuta npm install y vuelve a intentarlo."
+  $npm = (Get-Command "npm.cmd" -ErrorAction Stop).Source
+  $angularCli = Join-Path $projectRoot "node_modules\@angular\cli\bin\ng.js"
+  if (-not (Test-Path $angularCli)) {
+    throw "No se encontraron las dependencias de Angular. Ejecuta npm ci y vuelve a intentarlo."
   }
 
-  foreach ($candidate in 3000, 3001) {
+  foreach ($candidate in 4200, 4201) {
     $listener = Get-NetTCPConnection -LocalPort $candidate -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
     if (-not $listener) {
       $port = $candidate
@@ -87,12 +87,12 @@ try {
     }
   }
   if (-not $port) {
-    throw "Los puertos 3000 y 3001 ya están ocupados. Libera uno antes de iniciar el sitio."
+    throw "Los puertos 4200 y 4201 ya están ocupados. Libera uno antes de iniciar el sitio."
   }
 
   $serverProcess = Start-Process `
-    -FilePath $node `
-    -ArgumentList @("`"$nextCli`"", "dev", "--hostname", "127.0.0.1", "--port", "$port") `
+    -FilePath $npm `
+    -ArgumentList @("start", "--", "--host", "127.0.0.1", "--port", "$port") `
     -WorkingDirectory $projectRoot `
     -RedirectStandardOutput $stdoutPath `
     -RedirectStandardError $stderrPath `
@@ -116,7 +116,7 @@ try {
     }
     try {
       $response = Invoke-WebRequest -Uri $url -TimeoutSec 3 -UseBasicParsing
-      if ($response.StatusCode -eq 200 -and $response.Content.Contains("Mariachi Mexicanísimo")) {
+      if ($response.StatusCode -eq 200 -and $response.Content.Contains("Invitation Studio")) {
         break
       }
     } catch {
@@ -138,7 +138,7 @@ try {
     if ($serverStartedHere -and $serverProcess.HasExited) {
       throw "El servidor de desarrollo se detuvo. Revisa $stderrPath."
     }
-    if ([MariachiSession.Power]::SetThreadExecutionState($executionState) -eq 0) {
+    if ([InvitationStudioSession.Power]::SetThreadExecutionState($executionState) -eq 0) {
       throw "Windows dejó de mantener activa la pantalla."
     }
     Start-Sleep -Seconds 20
@@ -147,6 +147,6 @@ try {
   if ($serverStartedHere -and $serverProcess -and -not $serverProcess.HasExited) {
     Stop-Process -Id $serverProcess.Id
   }
-  [MariachiSession.Power]::SetThreadExecutionState($normal) | Out-Null
+  [InvitationStudioSession.Power]::SetThreadExecutionState($normal) | Out-Null
   Remove-Item -LiteralPath $statePath, $stopSignalPath -Force -ErrorAction SilentlyContinue
 }

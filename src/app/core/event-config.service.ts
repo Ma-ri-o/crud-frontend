@@ -4,7 +4,7 @@ import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import type { EventConfig, TemplateSummary, ThemeId } from './invitation.models';
 const PREVIEW_KEY='invitation-studio.preview.';
-const themes:ThemeId[]=['elegant','luxury','floral','kids','minions','superheroes','princess','space','safari','mexican'];
+const themes:ThemeId[]=['elegant','luxury','floral','kids','minions','superheroes','princess','space','safari'];
 @Injectable({providedIn:'root'})
 export class EventConfigService {
  private readonly http=inject(HttpClient);private readonly platformId=inject(PLATFORM_ID);private readonly document=inject(DOCUMENT);
@@ -18,7 +18,7 @@ export class EventConfigService {
   if(!c||c.schemaVersion!==1)throw new Error('schemaVersion debe ser 1.');
   for(const key of ['slug','title','subtitle','eventType','theme','sections','seo'] as const)if(!c[key])throw new Error(`Falta el campo requerido "${key}".`);
   if(!/^[a-z0-9-]{1,64}$/.test(c.slug))throw new Error('El slug solo puede contener minúsculas, números y guiones.');
-  if(!['birthday','wedding','anniversary','graduation','commercial','custom'].includes(c.eventType))throw new Error('Tipo de evento no reconocido.');
+  if(!['birthday','wedding','anniversary','graduation','custom'].includes(c.eventType))throw new Error('Tipo de evento no reconocido.');
   if(!themes.includes(c.theme))throw new Error('El tema seleccionado no está registrado.');
   if(!c.sections||typeof c.sections!=='object'||Object.values(c.sections).some(v=>typeof v!=='boolean'))throw new Error('Las secciones deben usar valores true/false.');
   if(!Array.isArray(c.gallery)||!Array.isArray(c.story)||!Array.isArray(c.timeline))throw new Error('Galería, historia y agenda deben ser listas.');

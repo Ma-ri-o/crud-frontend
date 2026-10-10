@@ -20,7 +20,6 @@ flowchart TD
   Router --> StudioHome[StudioHomeComponent]
   Router --> Editor[StudioEditorComponent]
   Router --> EventPage[EventPageComponent /i/:slug]
-  Router --> Business[Mariachi landing y rutas existentes]
   StudioHome --> Catalog[/config/events/index.json]
   Editor --> ConfigService[EventConfigService]
   Editor --> LocalStorage[(Borrador local)]
@@ -78,7 +77,7 @@ El motor separa:
 - **Presentación compartida**: `InvitationViewComponent` y estilos de invitación.
 - **Composición**: `sections` controla visibilidad; contenido vacío también puede impedir render de algunas secciones.
 - **Navegación**: `/i/:slug` es una ruta genérica que carga el JSON del slug.
-- **Plantillas de inicio**: catálogo `index.json`, actualmente Emiliano Ulises y Mariachi Mexicanísimo.
+- **Plantillas de inicio**: catálogo `index.json`; cada invitación se define como una entrada de configuración validada.
 
 No existe un sistema runtime de plugins ni una carpeta de componentes de tema. Una nueva sección con markup/comportamiento nuevo sí requiere código; evitar duplicar vistas completas es el criterio KISS.
 
@@ -97,7 +96,7 @@ Los overrides de color por invitación sí son configuración JSON; cambiar tipo
 
 ## SEO
 
-`SeoService.updateFromInvitation()` cambia el title, description, Open Graph, Twitter cards y el script JSON-LD existente en el documento. Los eventos usan Schema.org `Event`; la configuración comercial usa `LocalBusiness`. La imagen SEO es opcional y proviene de `seo.image`.
+`SeoService.updateFromInvitation()` cambia el title, description, Open Graph, Twitter cards y el script JSON-LD existente en el documento. Los eventos usan Schema.org `Event`. La imagen SEO es opcional y proviene de `seo.image`.
 
 La actualización ocurre en el cliente una vez cargado el JSON. No hay SSR/prerender en este workspace: crawlers o previews que no ejecutan JavaScript pueden no ver metadata específica. No se genera canonical URL por slug ni se inventa dominio; para indexación social consistente hace falta SSR/prerender o una estrategia de hosting compatible.
 
