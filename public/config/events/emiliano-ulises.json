@@ -19,7 +19,7 @@
   "timeline": [],
   "music": { "enabled": false, "src": "", "title": "Música de la celebración" },
   "gifts": { "enabled": false, "message": "Tu compañía es nuestro mejor regalo.", "links": [] },
-  "rsvp": { "enabled": true, "fields": ["name", "attending", "guests", "comments"], "successMessage": "¡Gracias! Tu respuesta quedó guardada en este dispositivo." },
+  "rsvp": { "enabled": true, "fields": ["name", "attending", "guests", "comments"], "successMessage": "¡Gracias! Revisa tu respuesta y envíala por WhatsApp para confirmar." },
   "openData": { "enabled": false, "jikan": false, "pokeApi": false },
   "seo": { "title": "Cumpleaños de Emiliano Ulises | Invitación", "description": "Acompáñanos a celebrar el cumpleaños de Emiliano Ulises en Cocotitlán, Estado de México." }
 }

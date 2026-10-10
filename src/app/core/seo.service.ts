@@ -13,6 +13,8 @@ export class SeoService {
   updateFromSiteConfig(config: typeof SITE_CONFIG): void {
     const title = `${config.name} | Serenatas y eventos en Estado de México`;
     this.title.setTitle(title);
+    this.meta.removeTag('property="og:image"');
+    this.meta.removeTag('name="twitter:image"');
     this.meta.updateTag({ name: 'description', content: config.description });
     this.meta.updateTag({ name: 'keywords', content: config.keywords.join(', ') });
     this.meta.updateTag({ property: 'og:type', content: 'website' });
@@ -30,6 +32,7 @@ export class SeoService {
     const title = config.seo.title || config.title;
     const description = config.seo.description || config.description;
     this.title.setTitle(title);
+    this.meta.removeTag('name="keywords"');
     this.meta.updateTag({ name:'description', content:description });
     this.meta.updateTag({ property:'og:type', content:'website' });
     this.meta.updateTag({ property:'og:locale', content:'es_MX' });
@@ -40,6 +43,7 @@ export class SeoService {
     this.meta.updateTag({ name:'twitter:title', content:title });
     this.meta.updateTag({ name:'twitter:description', content:description });
     if(config.seo.image){this.meta.updateTag({property:'og:image',content:config.seo.image});this.meta.updateTag({name:'twitter:image',content:config.seo.image});}
+    else{this.meta.removeTag('property="og:image"');this.meta.removeTag('name="twitter:image"');}
     const schema = config.eventType === 'commercial'
       ? { '@context':'https://schema.org', '@type':'LocalBusiness', name:config.hostName, description, areaServed:config.location }
       : { '@context':'https://schema.org', '@type':'Event', name:config.title, description, startDate:config.date?`${config.date}${config.time?`T${config.time}`:''}`:undefined, location:config.location?{'@type':'Place',name:config.location,address:config.address||undefined}:undefined, organizer:{'@type':'Person',name:config.hostName} };
