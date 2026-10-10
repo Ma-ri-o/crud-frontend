@@ -1,0 +1,6 @@
+{
+  "templates": [
+    { "slug": "emiliano-ulises", "title": "Cumpleaños de Emiliano Ulises", "description": "Celebración infantil en Cocotitlán", "eventType": "birthday", "theme": "kids", "preview": "birthday" },
+    { "slug": "mariachi-mexicanisimo", "title": "Mariachi Mexicanísimo", "description": "Plantilla comercial para servicios musicales", "eventType": "commercial", "theme": "mexican", "preview": "mariachi" }
+  ]
+}
