@@ -1,164 +1,171 @@
 # Invitation Studio
 
-Invitation Studio es una plataforma Angular para generar invitaciones y experiencias digitales desde documentos JSON y una configuración visual. Parte de la aplicación standalone existente de Mariachi Mexicanísimo: se conserva su landing, sus formularios, galería y recursos locales como una plantilla comercial dentro del sistema.
+Invitation Studio es un motor web de invitaciones digitales basado en Angular. Permite publicar experiencias para eventos usando configuraciones JSON, un editor visual, temas compartidos y componentes reutilizables. El objetivo es que el contenido y la composición de una invitación se puedan adaptar sin duplicar una página Angular por evento.
+
+La aplicación también conserva una landing comercial para Mariachi Mexicanísimo y sirve como plantilla de negocio dentro del mismo proyecto.
+
+## Casos de uso
+
+- Cumpleaños, bautizos, XV años, bodas, aniversarios y graduaciones.
+- Invitaciones para eventos corporativos y celebraciones familiares.
+- Landing pages comerciales, incluida la plantilla de Mariachi Mexicanísimo.
+- Invitaciones temáticas con paletas y tipografías configurables.
+- Contenido opcional relacionado con anime (Jikan) y Pokémon (PokéAPI).
+
+Anime y Pokémon se ofrecen como integraciones de datos opcionales, no como plantillas gráficas incluidas. El proyecto no contiene imágenes o música oficiales de franquicias; antes de publicar contenido de terceros, verifica licencias y permisos.
+
+## Tecnologías
+
+- Angular 22.2, Angular Router y Angular Service Worker.
+- TypeScript 6 y SCSS.
+- Standalone Components, Signals y change detection `OnPush`.
+- RxJS para peticiones HTTP y composición de flujos.
+- Reactive Forms para el formulario RSVP.
+- JSON estático como contrato de configuración.
 
 ## Requisitos
 
-- Node.js `^22.22.3 || ^24.15.0 || ^26.0.0` y npm 10 o superior.
-- Angular 22.2 y TypeScript 6.
+- Node.js `^22.22.3 || ^24.15.0 || ^26.0.0`.
+- npm `>=10`.
 
-La compatibilidad de Node/TypeScript sigue la [tabla oficial de Angular](https://angular.dev/reference/versions). El proyecto se fijó en Angular 22.2.2.
+Las versiones de Angular y Node deben seguir la [tabla de compatibilidad de Angular](https://angular.dev/reference/versions). El proyecto fija Angular 22.2.2 y TypeScript 6 en sus manifiestos.
 
-## Inicio rápido
+## Instalación y ejecución local
+
+Desde la raíz del repositorio:
 
 ```bash
 npm ci
 npm start
 ```
 
-Abre `http://localhost:4200`. Comandos adicionales:
+Abre `http://localhost:4200`. El servidor de desarrollo usa la configuración `development`; el Service Worker no se habilita durante desarrollo.
+
+## Build y producción
 
 ```bash
-npm run build                 # build de producción con PWA
-npm run build:production      # alias explícito del build de producción
+npm run build                 # build según la configuración predeterminada
+npm run build:production      # build de producción con hashing y Service Worker
 npm run check:config          # verifica catálogo y archivos JSON
-npm run analyze               # build con stats JSON
+npm run analyze               # genera build con stats JSON
 ```
 
-## Rutas
+El resultado de producción se genera en `dist/mariachi-mexicanisimo/browser`. Publica el contenido de esa carpeta en un hosting estático y configura un fallback de rutas SPA a `index.html`, sin interceptar los archivos estáticos existentes. Ejemplos de configuración del repositorio: [`vercel.json`](./vercel.json), [`public/_redirects`](./public/_redirects) y [`public/staticwebapp.config.json`](./public/staticwebapp.config.json).
 
-| Ruta | Función |
+La aplicación no incluye SSR. Las etiquetas SEO de cada invitación se actualizan en cliente; valida el comportamiento del crawler y configura SSR/prerender si la plataforma necesita HTML y metadata por slug antes de ejecutar JavaScript. En producción se requiere HTTPS para PWA, QR y enlaces externos confiables.
+
+## Rutas de aplicación
+
+| Ruta | Uso |
 | --- | --- |
-| `/` | Catálogo y presentación de Invitation Studio |
-| `/studio` | Editor visual, editor JSON, importación/exportación y vista previa local |
-| `/i/:slug` | Invitación pública renderizada según el JSON publicado |
-| `/mariachi` | Landing comercial existente de Mariachi Mexicanísimo |
-| `/galeria`, `/contacto`, `/reservar` | Rutas comerciales existentes, lazy-loaded |
+| `/` | Catálogo y página inicial de Invitation Studio. |
+| `/studio` | Editor de plantillas, configuración JSON e importación/exportación. |
+| `/i/:slug` | Invitación que carga `public/config/events/:slug.json`. |
+| `/mariachi` | Landing comercial de Mariachi Mexicanísimo. |
+| `/galeria`, `/contacto`, `/reservar` | Páginas comerciales existentes. |
 
-Las páginas feature se cargan con `loadComponent`, y las vistas de plantilla cargan únicamente los datos JSON del evento seleccionado.
+Las rutas cargan componentes con `loadComponent` para mantener las páginas feature en chunks lazy.
 
-## Arquitectura
+## Estructura del proyecto
 
 ```text
 src/app/
-├── core/                       contratos, carga/validación JSON y SEO
+├── core/                 modelos, carga/validación de configuración, SEO y APIs
 ├── features/
-│   ├── studio/                 catálogo y editor visual/JSON (Signals)
-│   ├── invitation/             página y renderer por secciones
-│   ├── themes/                 catálogo de temas y variables CSS
-│   ├── integrations/           módulos opcionales Jikan y PokéAPI
-│   ├── home/                   landing comercial existente de Mariachi
-│   ├── gallery/ contact/ booking/
-│   └── shared/                 formularios y utilidades existentes
-├── app.routes.ts               routing lazy
-└── main.ts                     HTTP, router y Service Worker
+│   ├── studio/           catálogo y editor visual/JSON
+│   ├── invitation/       carga por slug, renderer, countdown
+│   ├── themes/           registro de temas y tokens CSS
+│   ├── integrations/     interfaz opcional para APIs abiertas
+│   ├── home/             landing comercial de Mariachi
+│   ├── gallery/
+│   ├── contact/
+│   └── booking/
+├── app.routes.ts         rutas lazy
+└── main.ts               bootstrap, HTTP, router y Service Worker
 public/
-├── config/events/              catálogo y configuraciones publicables
-├── images/mariachi/            fotografías existentes del negocio
-├── music/                      reservado para audio local
+├── config/events/        catálogo y JSON publicables
+├── images/               fotografías de plantillas
+├── music/                ubicación para audio autorizado
+├── icons/
 └── manifest.webmanifest
+docs/                     arquitectura, configuración, soporte y operación
+scripts/                  validación local de configuraciones
 ```
 
-```mermaid
-flowchart LR
-  C[Catálogo JSON] --> S[Studio: editor visual]
-  S -->|borrador local| LS[(localStorage del navegador)]
-  S -->|exportar| J[archivo JSON]
-  J --> P[public/config/events]
-  P --> R[EventConfigService]
-  R --> T[ThemeRegistryService]
-  T --> V[InvitationView]
-  V --> H[Hero / detalles]
-  V --> A[Countdown / agenda]
-  V --> G[Galería / música]
-  V --> RSVP[RSVP a WhatsApp]
-  V --> QR[QR del enlace]
-  V -. opt-in .-> API[Jikan / PokéAPI]
-```
+## Plantillas incluidas
 
-## Configuración sin cambiar TypeScript
+- [`emiliano-ulises.json`](./public/config/events/emiliano-ulises.json): cumpleaños en Cocotitlán, Estado de México. Fecha, hora y dirección exacta permanecen vacías hasta recibir datos confirmados.
+- [`mariachi-mexicanisimo.json`](./public/config/events/mariachi-mexicanisimo.json): plantilla comercial con fotografías locales. Confirma con el negocio que la información de contacto, servicios y recursos siga vigente antes de publicar.
 
-El catálogo es `public/config/events/index.json`. Cada tarjeta apunta a un archivo con el mismo slug dentro de `public/config/events/`. Las plantillas incluidas son:
+El catálogo está en [`public/config/events/index.json`](./public/config/events/index.json). La guía para cada propiedad, validación y defaults está en [Configuración](./docs/CONFIGURATION.md) y [Contrato JSON](./docs/JSON-SCHEMA.md).
 
-- `emiliano-ulises.json`: cumpleaños infantil en Cocotitlán, Estado de México. La fecha, hora y dirección quedan pendientes de proporcionar; no se inventan.
-- `mariachi-mexicanisimo.json`: plantilla comercial que conserva fotos locales y lleva a la zona de servicio de la landing existente.
+## Temas disponibles
 
-El editor `/studio` permite modificar texto, fecha, hora, ubicación, tema, colores, visibilidad de secciones, imagen, historias, galería, audio, WhatsApp RSVP y las integraciones. **Guardar vista previa** almacena un borrador solo en el navegador actual; **Descargar JSON** genera el artefacto portable. Para publicarlo, copia el JSON exportado a `public/config/events/<slug>.json` y agrega su entrada en `index.json`; despliega una compilación nueva. Los archivos publicados son configuración fuente y no requieren cambios en los componentes.
+El registro actual ofrece `elegant`, `luxury`, `floral`, `kids`, `minions`, `superheroes`, `princess`, `space`, `safari` y `mexican`. Los temas comparten un renderer y aportan una paleta, tipografías seguras y decoración; `colors` permite overrides por invitación.
 
-La forma tipada documentada está en `src/app/core/invitation.models.ts`. Ejemplo mínimo:
+Cambiar de tema existente se hace desde el editor o desde `theme` en el JSON. Añadir un nuevo identificador aún requiere actualizar TypeScript y el registro. Consulta [Temas](./docs/THEMES.md) antes de extenderlo.
 
-```json
-{
-  "schemaVersion": 1,
-  "slug": "emiliano-ulises",
-  "eventType": "birthday",
-  "title": "Cumpleaños de Emiliano Ulises",
-  "subtitle": "¡Estás invitado a celebrar!",
-  "description": "Acompáñanos en Cocotitlán.",
-  "date": "",
-  "time": "",
-  "timezone": "America/Mexico_City",
-  "location": "Cocotitlán, Estado de México",
-  "address": "",
-  "mapUrl": "https://www.google.com/maps/search/?api=1&query=Cocotitlan",
-  "theme": "kids",
-  "hostName": "Familia de Emiliano",
-  "sections": { "countdown": false, "story": false, "details": true, "gallery": false, "map": true, "gifts": false, "rsvp": true, "timeline": false, "music": false, "openData": false },
-  "story": [], "gallery": [], "timeline": [],
-  "music": { "enabled": false, "src": "", "title": "" },
-  "gifts": { "enabled": false, "message": "", "links": [] },
-  "rsvp": { "enabled": true, "fields": ["name", "attending", "guests", "comments"], "successMessage": "¡Gracias por responder!" },
-  "openData": { "enabled": false, "jikan": false, "pokeApi": false },
-  "seo": { "title": "Invitación", "description": "Detalles de la celebración." }
-}
-```
+## Personalización básica
 
-Campos de imagen/audio usan archivos locales en `public/`: por ejemplo `/images/eventos/foto.webp` o `/music/tema.mp3`. Siempre escribe texto alternativo para fotografías. Se permite URL HTTPS para imágenes aprobadas. El Service Worker precarga shell y configuración; imágenes y música se descargan bajo demanda.
+1. Abre `/studio` y elige una plantilla o crea un evento.
+2. Edita el contenido, los colores, las secciones, el RSVP y las rutas de recursos.
+3. Guarda una vista previa en el navegador y prueba `/i/:slug`.
+4. Descarga el JSON, colócalo en `public/config/events/<slug>.json` y agrega el resumen a `index.json`.
+5. Copia imágenes y audio con permiso a `public/`, valida referencias y ejecuta:
 
-## Temas
+   ```bash
+   npm run check:config
+   npm run build:production
+   ```
 
-`ThemeRegistryService` define diez tokens listos: Elegant, Luxury, Floral, Kids, Minions, Superheroes, Princess, Space, Safari y Mexican. Cada tema registra paleta, colores de texto/superficie, tipografías seguras, motivos y ambiente. `colors` permite overrides por evento. Los componentes leen las propiedades `--invite-*`, por lo que un nuevo tema o ajuste de paleta no obliga a duplicar el renderer.
+6. Revisa rutas directas, enlaces, dispositivos móviles, accesibilidad y comportamiento offline; después publica el build.
 
-## Secciones de invitación
+Guardar vista previa solo utiliza `localStorage` de ese navegador. Exportar no publica archivos por sí solo. RSVP tampoco persiste en un servidor: se muestra una respuesta y, si hay teléfono, una persona puede abrir WhatsApp y enviarla.
 
-El renderer es standalone y orientado a configuración: hero, countdown, story, detalles, mapa externo, agenda, galería, regalos, RSVP, música, contenido API, QR y footer. `sections.<id>` habilita cada módulo. Las fotografías se sirven con `NgOptimizedImage` y carga diferida; el audio usa controles nativos con `preload="none"`. No hay reproducción automática.
+## Solución rápida de problemas
 
-## RSVP y QR
+| Síntoma | Primer diagnóstico |
+| --- | --- |
+| El catálogo o la invitación no abre | Comprueba el fallback SPA, el `slug`, la ruta JSON y la pestaña Network del navegador. |
+| La plantilla falla al publicar | Ejecuta `npm run check:config`; compara el nombre de archivo, `slug` y entrada del catálogo. |
+| Una imagen o audio no aparece | Confirma el archivo bajo `public/`, la URL pública absoluta `/...` y mayúsculas/minúsculas. |
+| No aparece el countdown | `sections.countdown` debe ser `true` y `date` no puede estar vacía. |
+| WhatsApp no se abre | Configura un número con código de país y dígitos solamente; el envío requiere una acción del invitado. |
+| El QR no carga | La imagen depende del servicio externo QRServer y de conectividad; prueba la URL pública en una pestaña privada. |
 
-El RSVP valida nombre y asistencia, y construye una respuesta destinada al WhatsApp que se configure en `rsvp.whatsappNumber`. El formulario no envía datos a un servidor ni afirma haber reservado un lugar; es responsabilidad del anfitrión revisar la conversación. Si se necesita recolección central, agrega un endpoint autenticado/protegido, consentimiento y política de retención antes de guardar datos personales.
+La guía completa de soporte y diagnóstico está en [Support](./docs/SUPPORT.md) y [Runbook](./docs/RUNBOOK.md).
 
-El QR codifica la URL que está abierta usando QRServer. Para controlar disponibilidad o evitar solicitudes a terceros, reemplaza el generador por un paquete local como `qrcode` y añade el QR generado a assets.
+## FAQ
 
-## APIs open source
+**¿Puedo crear una invitación nueva sin programar?**
 
-- **Jikan**: endpoint público de información de anime (`api.jikan.moe`), sin credenciales. La llamada solo ocurre cuando la sección está habilitada y se pulsa el botón.
-- **PokéAPI**: endpoint público de datos Pokémon (`pokeapi.co`), sin credenciales. La llamada es opcional, interactiva y no bloquea el render inicial.
+Sí: edita o crea un borrador en `/studio`, valida y exporta el JSON. Publicarlo requiere agregarlo al catálogo, ponerlo en el repositorio y desplegar.
 
-Estas APIs son ejemplos temáticos para extensibilidad; no forman parte de los datos principales de RSVP ni se usan como base de negocio. Las respuestas pueden no estar disponibles, estar limitadas por frecuencia o cambiar externamente; se muestran estados de error y el resto de la invitación sigue funcionando.
+**¿Las respuestas RSVP se guardan?**
 
-## PWA, offline y SSR
+No. El formulario se valida en el navegador. El usuario puede abrir WhatsApp con un mensaje preparado; se requiere backend para persistencia central.
 
-El Service Worker se habilita solo en build de producción. `ngsw-config.json` precarga el shell y los JSON de plantilla, y cachea local-media de forma lazy. La estrategia `freshness` cachea respuestas de APIs por un día con `maxSize` acotado. Cambios a assets se publican con hashing y revisión de actualización estándar de Angular.
+**¿Puedo agregar temas sin cambios de código?**
 
-SSR no se configura en esta primera entrega porque las invitaciones admiten selección de JSON estático desde `/public`. Si SEO de cada slug requiere HTML inicial en servidor, habilita Angular SSR con `ng add @angular/ssr`, valida hidratación del renderer y protege usos de `window`/`localStorage` detrás de `isPlatformBrowser`.
+Se pueden elegir los temas existentes y personalizar sus colores desde JSON. Registrar un tema nuevo requiere cambiar el tipo `ThemeId`, el allowlist de validación y `THEME_REGISTRY`.
 
-## SEO y metadatos
+**¿El QR y las APIs funcionan offline?**
 
-`SeoService` actualiza title, description, OG, Twitter y JSON-LD según la invitación; usa `Event` para celebraciones y `LocalBusiness` en la plantilla comercial. El documento raíz ofrece valores fallback. Configura dominio canónico y un `seo.image` absoluta cuando estén disponibles, sin URLs inventadas. Para indexación prerenderizada por slug usa SSR/prerender.
+El QR remoto y las llamadas a APIs requieren internet. El Service Worker puede cachear respuestas y recursos según su configuración, pero no se debe asumir que todo recurso externo estará disponible offline.
 
-## Despliegue
+**¿SSR está habilitado?**
 
-El proyecto compila como SPA Angular a `dist/mariachi-mexicanisimo/browser`. `vercel.json` ofrece rewrite SPA. Importa el repo en Vercel, selecciona Angular/Other según autodetección y configura `npm run build` con ese output. Para otros hosts usa fallback/rewrite a `index.html` (la configuración existente incluye Netlify y Azure Static Web Apps).
+No en la configuración actual. SEO se actualiza en cliente. Consulta [Arquitectura](./docs/ARCHITECTURE.md) para la implicación y posibles siguientes pasos.
 
-## Documentación ampliada
+## Documentación
 
-- `docs/architecture/OVERVIEW.md`
-- `docs/architecture/CONFIGURATION.md`
-- `docs/architecture/PWA_AND_INTEGRATIONS.md`
-- `docs/architecture/ROADMAP.md`
-- `docs/MIGRATION_IMPROVEMENTS.md` (documento histórico de la landing Mariachi)
-- `RECOVERY_REPORT.md` (diagnóstico anterior de dependencias)
-
-## Información pendiente
-
-No se proporcionaron fecha, hora, dirección exacta ni contacto de la familia para la plantilla infantil; el archivo los deja vacíos. Las solicitudes RSVP no son persistidas en backend. No se garantiza una cifra Lighthouse antes de medir dominio, imágenes, servidor y modo de publicación. La app reutiliza la landing Mariachi tal como estaba, cuyos datos de atención existentes deben ser confirmados por el negocio antes de publicarse como plantilla.
+- [Arquitectura](./docs/ARCHITECTURE.md)
+- [Configuración de invitaciones](./docs/CONFIGURATION.md)
+- [Contrato y ejemplos JSON](./docs/JSON-SCHEMA.md)
+- [Temas y recursos visuales](./docs/THEMES.md)
+- [APIs open source](./docs/OPEN-DATA.md)
+- [Soporte técnico](./docs/SUPPORT.md)
+- [Operación y publicación](./docs/OPERATIONS.md)
+- [Guía de desarrollo](./docs/DEVELOPMENT.md)
+- [Runbook de soporte](./docs/RUNBOOK.md)
+- [Documentación de arquitectura previa](./docs/architecture/)
