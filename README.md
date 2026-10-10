@@ -4,8 +4,30 @@ Invitación digital mobile-first para el cumpleaños de Emiliano Ulises. La apli
 
 ## Requisitos
 
-- Node.js 22 o superior compatible con `package.json`
+- Node.js `^22.22.3`, `^24.15.0` o `^26.0.0`
 - npm 10 o superior
+
+## Estructura y funcionamiento
+
+```text
+src/app/
+  app.routes.ts                         Rutas de la invitación
+  core/
+    event-config.service.ts             Carga y valida la configuración
+    invitation.models.ts                Tipos de los datos del evento
+    seo.service.ts                      Metadatos del navegador
+  features/invitation/
+    event-page.component.ts             Estado de carga y errores
+    event-invitation.component.*        Presentación de la invitación
+public/
+  data/event.json                       Configuración del evento
+  images/emiliano-ulises/               Imágenes locales
+scripts/
+  validate-events.mjs                  Validación de la configuración
+  generate-invitation-share-pages.mjs   Metadatos sociales para el build
+```
+
+La ruta `/` muestra la invitación. También existe `/i/:slug`, que carga la misma configuración y requiere que el slug coincida con el definido en `public/data/event.json`. La aplicación actualmente obtiene un evento de ese archivo JSON; no requiere un servidor backend. La página presenta un estado de carga o un mensaje de error si la configuración no puede cargarse o validarse.
 
 ## Desarrollo local
 
@@ -14,7 +36,13 @@ npm ci
 npm start
 ```
 
-Abre `http://localhost:4200`. La raíz muestra directamente la invitación.
+Abre `http://localhost:4200`. La raíz muestra directamente la invitación. Para permitir conexiones desde otros dispositivos de la red local, inicia Angular con:
+
+```bash
+npm start -- --host 0.0.0.0
+```
+
+El servidor permanece activo en esa terminal y observa cambios; detenlo con `Ctrl+C`.
 
 ## Personalizar el evento
 
