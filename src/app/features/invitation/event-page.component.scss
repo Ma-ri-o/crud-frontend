@@ -1,0 +1,26 @@
+.event-loading,
+.event-load-error {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 2rem;
+  color: #17304f;
+  background: #fff;
+  text-align: center;
+}
+
+.event-load-error > div {
+  max-width: 32rem;
+}
+
+.event-load-error h1 {
+  margin: 0.75rem 0;
+  color: #1565c0;
+}
+
+.event-load-error a {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #1565c0;
+  font-weight: 700;
+}

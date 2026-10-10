@@ -1,3 +1,15 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "framework": "angular",
+  "buildCommand": "npm run build:production",
+  "outputDirectory": "dist/emiliano-invitation/browser",
+  "rewrites": [
+    {
+      "source": "/i/:slug",
+      "destination": "/"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }

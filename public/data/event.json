@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "slug": "emiliano-ulises",
+  "eventType": "birthday",
+  "title": "¡Emiliano Ulises cumple 4! ¿Vienes a jugar conmigo?",
+  "subtitle": "¡Ya casi cumplo 4! Ven a jugar, comer pastel y celebrar conmigo. ¡Habrá muchas sorpresas!",
+  "description": "¡Ven a mi fiesta! Emiliano Ulises cumple 4 años en Cocotitlán. Tendremos juegos, pastel y muchas sorpresas.",
+  "age": 4,
+  "date": "2026-11-14",
+  "time": "15:30",
+  "timezone": "America/Mexico_City",
+  "location": "Cocotitlán, Estado de México",
+  "address": "Cocotitlán, Estado de México",
+  "mapUrl": "https://maps.app.goo.gl/VAwdV4fS8AYFLC3Y6",
+  "theme": "superheroes",
+  "themeLabel": "¡Minions y superhéroes al rescate!",
+  "colors": {
+    "primary": "#1565C0",
+    "accent": "#FFD54F",
+    "background": "#FFFFFF",
+    "text": "#17304F",
+    "surface": "#FFFFFF"
+  },
+  "heroImage": "/images/emiliano-ulises/fondo-invitacion.jpg",
+  "heroImageAlt": "Ilustración de un Minion con overol azul y gafas grandes",
+  "heroImageWidth": 720,
+  "heroImageHeight": 822,
+  "hostName": "Familia de Emiliano",
+  "sections": {
+    "countdown": true,
+    "story": false,
+    "details": true,
+    "gallery": true,
+    "map": true,
+    "gifts": true,
+    "rsvp": true,
+    "timeline": false,
+    "music": false,
+    "openData": false
+  },
+  "story": [],
+  "gallery": [
+    {
+      "src": "/images/emiliano-ulises/hero-scene.jpg",
+      "alt": "Ilustración de un pequeño superhéroe sentado",
+      "caption": "¡Mi aventura empieza contigo!",
+      "width": 615,
+      "height": 689
+    },
+    {
+      "src": "/images/emiliano-ulises/hero-sidekick.jpg",
+      "alt": "Un pequeño héroe listo para celebrar",
+      "caption": "¡Vamos a jugar y divertirnos!",
+      "width": 736,
+      "height": 1472
+    },
+    {
+      "src": "/images/emiliano-ulises/hero-scene.jpg",
+      "alt": "Ilustración del mismo superhéroe sentado",
+      "caption": "¡Misión: comer pastel!",
+      "width": 615,
+      "height": 689
+    },
+    {
+      "src": "/images/emiliano-ulises/hero-sidekick.jpg",
+      "alt": "Un compañero superhéroe para la aventura",
+      "caption": "¡Mi equipo de amigos está listo!",
+      "width": 736,
+      "height": 1472
+    },
+    {
+      "src": "/images/emiliano-ulises/hero-scene.jpg",
+      "alt": "Un superhéroe celebrando un día especial",
+      "caption": "¡A celebrar con mis superpoderes!",
+      "width": 615,
+      "height": 689
+    }
+  ],
+  "timeline": [],
+  "music": {
+    "enabled": false,
+    "src": "",
+    "title": "Música de la celebración"
+  },
+  "gifts": {
+    "enabled": true,
+    "message": "¡Mi mejor regalo es que vengas a jugar y celebrar conmigo!",
+    "links": []
+  },
+  "rsvp": {
+    "enabled": true,
+    "whatsappNumber": "525658572679",
+    "eventName": "cumpleaños de Emiliano Ulises",
+    "fields": ["name", "attending", "comments"],
+    "successMessage": "¡Yupi! Tu respuesta está lista. ¡Ojalá puedas venir a jugar conmigo!"
+  },
+  "openData": {
+    "enabled": false,
+    "jikan": false,
+    "pokeApi": false
+  },
+  "seo": {
+    "title": "Cumpleaños de Emiliano Ulises",
+    "description": "¡Ven a mi fiesta! Emiliano Ulises cumple 4 años en Cocotitlán. Tendremos juegos, pastel y muchas sorpresas.",
+    "image": "/images/emiliano-ulises/fondo-invitacion.jpg"
+  }
+}

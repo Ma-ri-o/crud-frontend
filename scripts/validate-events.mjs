@@ -1,33 +1,40 @@
-import { readdir, readFile } from 'node:fs/promises';
-import { join } from 'node:path';
-const root = new URL('../public/config/events/', import.meta.url);
-const index = JSON.parse(await readFile(new URL('index.json', root), 'utf8'));
-const slugs = new Set();
-for (const entry of index.templates ?? []) {
-  if (!/^[a-z0-9-]{1,64}$/.test(entry.slug)) throw new Error(`Slug inválido: ${entry.slug}`);
-  if (slugs.has(entry.slug)) throw new Error(`Slug repetido: ${entry.slug}`);
-  slugs.add(entry.slug);
-  const event = JSON.parse(await readFile(new URL(`${entry.slug}.json`, root), 'utf8'));
-  for (const key of ['schemaVersion','slug','eventType','title','subtitle','theme','sections','story','gallery','timeline','rsvp','music','seo']) {
-    if (!(key in event)) throw new Error(`${entry.slug}: falta ${key}`);
-  }
-  if (event.slug !== entry.slug) throw new Error(`${entry.slug}: el slug del JSON no coincide`);
-  if (!Array.isArray(event.gallery) || !Array.isArray(event.story) || !Array.isArray(event.timeline)) throw new Error(`${entry.slug}: story, gallery y timeline deben ser arreglos`);
-  if ((event.heroImageWidth !== undefined && (!Number.isInteger(event.heroImageWidth) || event.heroImageWidth <= 0))
-    || (event.heroImageHeight !== undefined && (!Number.isInteger(event.heroImageHeight) || event.heroImageHeight <= 0))) {
-    throw new Error(`${entry.slug}: las dimensiones de portada deben ser enteros positivos`);
-  }
-  for (const image of [event.heroImage, event.heroSecondaryImage, ...event.gallery.map((photo) => photo.src)]) {
-    if (image?.startsWith('/') && !image.startsWith('//')) {
-      const asset = new URL(`../public${image}`, import.meta.url);
-      try {
-        await readFile(asset);
-      } catch {
-        throw new Error(`${entry.slug}: no se encuentra la imagen ${image}`);
-      }
+import { readFile } from 'node:fs/promises';
+
+const dataRoot = new URL('../public/', import.meta.url);
+const event = JSON.parse(await readFile(new URL('data/event.json', dataRoot), 'utf8'));
+
+for (const key of ['schemaVersion', 'slug', 'eventType', 'title', 'subtitle', 'theme', 'sections', 'gallery', 'rsvp', 'gifts', 'seo']) {
+  if (!(key in event)) throw new Error(`Falta el campo requerido "${key}" en data/event.json`);
+}
+
+if (event.schemaVersion !== 1) throw new Error('schemaVersion debe ser 1.');
+if (!/^[a-z0-9-]{1,64}$/.test(event.slug)) throw new Error('El slug solo puede contener minúsculas, números y guiones.');
+if (!event.heroImage || !event.heroImageAlt || !Number.isInteger(event.heroImageWidth) || !Number.isInteger(event.heroImageHeight)) {
+  throw new Error('La imagen principal requiere ruta, texto alternativo y dimensiones enteras.');
+}
+if (!Array.isArray(event.gallery) || event.gallery.length < 5 || event.gallery.length > 10) {
+  throw new Error('La galería debe contener entre 5 y 10 imágenes.');
+}
+if (event.gallery.some((photo) => !photo.src || !photo.alt || !Number.isInteger(photo.width) || !Number.isInteger(photo.height))) {
+  throw new Error('Cada imagen de galería requiere ruta, texto alternativo y dimensiones enteras.');
+}
+
+for (const image of [event.heroImage, event.heroSecondaryImage, ...event.gallery.map((photo) => photo.src)]) {
+  if (image?.startsWith('/') && !image.startsWith('//')) {
+    try {
+      await readFile(new URL(image.slice(1), dataRoot));
+    } catch {
+      throw new Error(`No se encuentra la imagen ${image}`);
     }
   }
 }
-const files = (await readdir(root)).filter((file) => file.endsWith('.json') && file !== 'index.json');
-for (const file of files) if (!slugs.has(file.slice(0,-5))) throw new Error(`Configuración fuera del catálogo: ${file}`);
-console.log(`Configuraciones válidas: ${[...slugs].join(', ')}`);
+
+if (!/^\d{4}-\d{2}-\d{2}$/.test(event.date)) throw new Error('La fecha debe usar formato YYYY-MM-DD.');
+if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(event.time)) throw new Error('La hora debe usar formato de 24 horas HH:mm.');
+if (!/^\d{10,15}$/.test(event.rsvp.whatsappNumber)) throw new Error('whatsappNumber debe incluir prefijo internacional y solo dígitos.');
+if (event.rsvp.enabled && !event.rsvp.eventName) throw new Error('rsvp.eventName es obligatorio cuando RSVP está habilitado.');
+for (const color of Object.values(event.colors ?? {})) {
+  if (color && !/^#[\da-f]{3,8}$/i.test(color)) throw new Error('Los colores deben usar formato hexadecimal.');
+}
+
+console.log(`Configuración válida: ${event.slug}; ${event.gallery.length} imágenes en galería`);

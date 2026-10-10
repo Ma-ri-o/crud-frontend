@@ -1,12 +1,9 @@
-@use './app/features/studio/studio.scss';
-@use './app/features/invitation/emiliano-invitation.component.scss';
-@use './app/features/invitation/emiliano-invitation-gallery.scss';
+@use './app/features/invitation/event-invitation.component.scss';
 
 :root {
   color-scheme: light;
   font-family: Arial, Helvetica, sans-serif;
   font-synthesis: none;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -38,4 +35,10 @@ select:focus-visible,
 textarea:focus-visible {
   outline: 3px solid #ffd54f;
   outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

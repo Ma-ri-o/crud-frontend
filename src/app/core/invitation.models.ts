@@ -19,11 +19,16 @@ export interface EventConfig {
   address: string;
   mapUrl: string;
   theme: ThemeId;
+  themeLabel?: string;
   colors?: { primary?: string; accent?: string; background?: string; text?: string; surface?: string };
-  heroImage?: string;
-  heroImageWidth?: number;
-  heroImageHeight?: number;
+  heroImage: string;
+  heroImageAlt: string;
+  heroImageWidth: number;
+  heroImageHeight: number;
   heroSecondaryImage?: string;
+  heroSecondaryImageAlt?: string;
+  heroSecondaryImageWidth?: number;
+  heroSecondaryImageHeight?: number;
   hostName: string;
   sections: Record<SectionId, boolean>;
   story: EventStory[];
@@ -35,4 +40,3 @@ export interface EventConfig {
   openData: { enabled: boolean; jikan: boolean; pokeApi: boolean };
   seo: { title: string; description: string; image?: string };
 }
-export interface TemplateSummary { slug: string; title: string; description: string; eventType: EventKind; theme: ThemeId; preview: string; }

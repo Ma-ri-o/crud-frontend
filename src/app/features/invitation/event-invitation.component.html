@@ -1,11 +1,13 @@
-<main class="emiliano-invitation" [style.--party-primary]="config().colors?.primary || '#C62828'"
+<main class="event-invitation" [style.--party-primary]="config().colors?.primary || '#1565C0'"
   [style.--party-yellow]="config().colors?.accent || '#FFD54F'"
-  [style.--party-blue]="'#1565C0'"
-  (keydown.escape)="closePhoto()">
+  [style.--party-blue]="config().colors?.primary || '#1565C0'"
+  [style.--party-background]="config().colors?.background || '#FFFFFF'"
+  [style.--party-text]="config().colors?.text || '#17304F'"
+  [style.--party-surface]="config().colors?.surface || '#FFFFFF'">
   <a class="skip-link" href="#party-main">Saltar al contenido principal</a>
 
   <div class="confetti" aria-hidden="true">
-    @for (piece of confetti; track $index) {
+    @for (piece of confetti(); track $index) {
       <span [style.left]="piece.left" [style.animation-delay]="piece.delay"
         [style.animation-duration]="piece.duration" [style.background]="piece.color"
         [style.rotate]="piece.rotation"></span>
@@ -13,18 +15,24 @@
   </div>
 
   <header class="party-header">
-    <a class="party-brand" href="#party-main" aria-label="Cumpleaños de Emiliano Ulises, inicio">
-      <span class="brand-shield" aria-hidden="true">★</span>
-      <span>INVITACIÓN ESPECIAL<small>FAMILIA DE EMILIANO</small></span>
+    <a class="party-brand" href="#party-main" [attr.aria-label]="config().title">
+      <span class="brand-copy">
+        <span class="brand-title">Invitación especial</span>
+        <small>{{ config().hostName }}</small>
+      </span>
     </a>
-    <a class="header-date" href="#detalles">
-      {{ shortDate().day }} {{ shortDate().month }}
-      <span>{{ config().date.slice(0, 4) }}</span>
+    <a class="header-date" href="#detalles" [attr.aria-label]="'Ver detalles del evento: ' + formatDate(config().date)">
+      <span>{{ shortDate().day }} {{ shortDate().month }}</span>
+      <span class="header-date-divider" aria-hidden="true">·</span>
+      <span class="header-date-year">{{ config().date.slice(0, 4) }}</span>
     </a>
   </header>
 
   <div id="party-main">
     <section class="party-hero" aria-labelledby="party-title">
+      <img class="hero-cover-image" [ngSrc]="config().heroImage" fill priority
+        sizes="(min-width: 801px) 58vw, 100vw"
+        [alt]="config().heroImageAlt">
       <div class="hero-burst burst-one" aria-hidden="true"></div>
       <div class="hero-burst burst-two" aria-hidden="true"></div>
       <div class="hero-copy">
@@ -33,25 +41,12 @@
         <p class="hero-subtitle">{{ config().subtitle }}</p>
         <div class="hero-tags" aria-label="Datos del festejo">
           @if (config().age) { <span>✦ NIVEL {{ config().age }} DESBLOQUEADO</span> }
-          <span>★ UNA MISIÓN INOLVIDABLE</span>
+          <span>★ {{ config().themeLabel || 'UNA MISIÓN INOLVIDABLE' }}</span>
         </div>
         <a class="party-button hero-cta" href="#confirmar">
           Confirmar asistencia <span aria-hidden="true">↗</span>
         </a>
         <p class="hero-host">Con mucho cariño, {{ config().hostName }}</p>
-      </div>
-      <div class="hero-art">
-        <span class="art-orbit orbit-a" aria-hidden="true"></span>
-        <span class="art-orbit orbit-b" aria-hidden="true"></span>
-        <img class="hero-cover-image" [ngSrc]="config().heroImage || '/images/emiliano-ulises/hero.svg'"
-          [width]="config().heroImageWidth || 760" [height]="config().heroImageHeight || 820" priority
-          alt="Minion listo para celebrar el cumpleaños de Emiliano Ulises">
-        @if (config().heroSecondaryImage; as secondaryImage) {
-          <img class="hero-secondary-image" [ngSrc]="secondaryImage" width="736" height="1472"
-            priority alt="Pequeño superhéroe sentado que acompaña a Emiliano en su aventura">
-        }
-        <span class="hero-sticker sticker-top" aria-hidden="true">POW!</span>
-        @if (config().age) { <span class="hero-sticker sticker-bottom" aria-hidden="true">{{ config().age }}★</span> }
       </div>
       <a class="scroll-cue" href="#cuenta-regresiva">DESCUBRE LA MISIÓN <span aria-hidden="true">↓</span></a>
     </section>
@@ -98,36 +93,9 @@
       </section>
     }
 
-    @if (config().sections.gallery) {
-      <section class="party-gallery section-shell" aria-labelledby="gallery-title">
-        <div class="section-heading">
-          <p class="section-kicker">EL EQUIPO DE LA AVENTURA</p>
-          <h2 id="gallery-title">Héroes, diversión y muchas sorpresas</h2>
-          <p>Un adelanto de la misión que celebraremos juntos.</p>
-        </div>
-        <div class="gallery-grid">
-          @for (slot of gallerySlots(); track slot.index) {
-            @if (slot.photo; as photo) {
-              <button class="gallery-card" type="button" (click)="showPhoto(photo)" [attr.aria-label]="'Ampliar: ' + photo.alt">
-                <img [ngSrc]="photo.src" [width]="photo.width || 640" [height]="photo.height || 560"
-                  loading="lazy" [alt]="photo.alt">
-                @if (photo.caption) { <span>{{ photo.caption }}</span> }
-                <i aria-hidden="true">↗</i>
-              </button>
-            } @else {
-              <div class="gallery-placeholder" role="img" [attr.aria-label]="'Espacio reservado para fotografía ' + (slot.index + 1)">
-                <span aria-hidden="true">＋</span>
-              </div>
-            }
-          }
-        </div>
-      </section>
-    }
-
     @if (config().sections.rsvp && config().rsvp.enabled) {
       <section class="party-rsvp section-shell" id="confirmar" aria-labelledby="rsvp-title">
         <div class="rsvp-copy">
-          <p class="section-kicker">¡NECESITAMOS A TU EQUIPO!</p>
           <h2 id="rsvp-title">¿Te unes a la aventura?</h2>
           <p>Cuéntanos si podrás venir. Tu respuesta se preparará en WhatsApp para enviarla a la familia.</p>
           <span class="rsvp-star" aria-hidden="true">★</span>
@@ -145,15 +113,9 @@
               <option value="no">Esta vez no podré</option>
             </select>
           </label>
-          @if (form.controls.attending.value === 'yes') {
-            <label>
-              Número de niños
-              <input type="number" formControlName="kids" min="0" max="20" inputmode="numeric">
-            </label>
-          }
           <label>
             Comentarios <span class="optional-label">(opcional)</span>
-            <textarea formControlName="comments" rows="3" maxlength="300" placeholder="Déjale un mensaje a Emiliano"></textarea>
+            <textarea formControlName="comments" rows="3" maxlength="300" placeholder="Escribe un comentario"></textarea>
           </label>
           @if (attempted() && form.invalid) {
             <p class="form-feedback form-error" role="alert">Escribe tu nombre y selecciona si asistirás.</p>
@@ -205,13 +167,4 @@
     <small>UNA CELEBRACIÓN LLENA DE PODER, AMISTAD Y ALEGRÍA</small>
   </footer>
 
-  @if (selectedPhoto(); as photo) {
-    <div class="lightbox" role="presentation" (click)="closeOnBackdrop($event)">
-      <dialog class="lightbox-dialog" open aria-modal="true" aria-label="Imagen ampliada" (click)="$event.stopPropagation()">
-        <button class="lightbox-close" type="button" aria-label="Cerrar imagen" (click)="closePhoto()">×</button>
-        <img [src]="photo.src" [alt]="photo.alt">
-        @if (photo.caption) { <p>{{ photo.caption }}</p> }
-      </dialog>
-    </div>
-  }
 </main>

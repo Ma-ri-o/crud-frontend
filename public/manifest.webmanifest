@@ -1,12 +1,12 @@
 {
-  "name": "Invitation Studio",
-  "short_name": "Invitations",
-  "description": "Crea y comparte invitaciones digitales personalizadas.",
+  "name": "Invitación digital",
+  "short_name": "Invitación",
+  "description": "Invitación digital para un evento especial.",
   "lang": "es-MX",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f7f5ef",
-  "theme_color": "#17271f",
-  "icons": [{ "src": "/icons/invitation-studio.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
 }

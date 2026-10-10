@@ -2,7 +2,7 @@
   "index": "/index.html",
   "assetGroups": [
     { "name": "app-shell", "installMode": "prefetch", "updateMode": "prefetch", "resources": { "files": ["/favicon.svg", "/icons/**", "/index.html", "/*.css", "/*.js", "/manifest.webmanifest"] } },
-    { "name": "event-configurations", "installMode": "prefetch", "updateMode": "prefetch", "resources": { "files": ["/config/events/**/*.json"] } },
+    { "name": "event-configuration", "installMode": "prefetch", "updateMode": "prefetch", "resources": { "files": ["/data/event.json"] } },
     { "name": "local-media", "installMode": "lazy", "updateMode": "prefetch", "resources": { "files": ["/images/**", "/music/**"] } }
   ],
   "dataGroups": [

@@ -1,8 +1,8 @@
 {
-  "name": "invitation-studio",
+  "name": "emiliano-invitation",
   "version": "2.0.0",
   "private": true,
-  "description": "Invitation Studio: plataforma Angular para invitaciones digitales configurables",
+  "description": "Invitación digital para el cumpleaños de Emiliano Ulises",
   "engines": {
     "node": "^22.22.3 || ^24.15.0 || ^26.0.0",
     "npm": ">=10.0.0"

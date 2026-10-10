@@ -1,99 +1,63 @@
-# Invitation Studio
+# Invitación de Emiliano Ulises
 
-Invitation Studio es una aplicación Angular para crear, previsualizar y publicar invitaciones digitales configurables. La información del evento vive en archivos JSON; el estudio permite editar una plantilla sin modificar el código de la aplicación.
-
-## Casos de uso
-
-- Cumpleaños y celebraciones familiares
-- Bodas, bautizos, graduaciones y aniversarios
-- Invitaciones temáticas y páginas de evento
-
-La configuración actual de ejemplo es el cumpleaños de Emiliano Ulises en Cocotitlán, Estado de México.
-
-## Tecnologías
-
-- Angular 22 y TypeScript
-- Standalone Components, Signals y Router con carga lazy
-- SCSS, formularios reactivos y RxJS
-- Service Worker para capacidades PWA
+Invitación digital mobile-first para el cumpleaños de Emiliano Ulises. La aplicación Angular carga los datos del evento desde `public/data/event.json`, muestra cuenta regresiva, detalles, galería con lightbox, RSVP por WhatsApp, regalo y mapa.
 
 ## Requisitos
 
-- Node.js compatible con el campo `engines` de [package.json](./package.json)
+- Node.js 22 o superior compatible con `package.json`
 - npm 10 o superior
 
-## Instalación y ejecución
+## Desarrollo local
 
 ```bash
 npm ci
 npm start
 ```
 
-Abre `http://localhost:4200`. La ruta raíz abre el estudio y `/i/emiliano-ulises` muestra la invitación.
+Abre `http://localhost:4200`. La raíz muestra directamente la invitación.
 
-## Validación y build
+## Personalizar el evento
+
+Actualiza `public/data/event.json` para modificar textos, edad, fecha, hora, tema, colores, teléfono de WhatsApp, mapa y rutas de imágenes. Conserva de 5 a 10 elementos en `gallery`; coloca los recursos locales bajo `public/images/` y referencia cada ruta desde la raíz del sitio. El número de WhatsApp debe incluir el prefijo del país y solo dígitos. No hay backend: el formulario construye un mensaje y abre WhatsApp para que el invitado lo envíe.
+
+### Cambiar la portada y el fondo del hero
+
+La imagen de portada se configura desde `heroImage` en `public/data/event.json`. Esa misma imagen se muestra como fondo de la sección principal y se usa para las vistas previas al compartir la invitación.
+
+1. Guarda la nueva imagen dentro de `public/images/emiliano-ulises/` (por ejemplo, `portada-emiliano.jpg`). Prefiere JPG o WebP optimizados y una imagen de buena resolución; una imagen vertical funciona mejor en móvil.
+2. Actualiza en `public/data/event.json` los valores `heroImage`, `heroImageAlt`, `heroImageWidth` y `heroImageHeight`. La ruta debe empezar con `/images/`, el texto alternativo debe describir la imagen y las dimensiones deben coincidir con el archivo original.
+3. Actualiza también `seo.image` con la misma ruta para que WhatsApp y Facebook utilicen la nueva portada al compartir el enlace.
+4. Ejecuta `npm run check:config` y `npm run build:production`, revisa el recorte en móvil y escritorio y vuelve a desplegar.
+
+El hero adapta la imagen para cubrir toda la portada (`object-fit: cover`), así que puede recortar parte de los bordes dependiendo de la pantalla. Para cambiar el punto visible sin editar la configuración del evento, ajusta `object-position` en `.hero-cover-image` de `src/app/features/invitation/event-invitation.component.scss`; por ejemplo, `center 35%` desplaza el encuadre hacia la parte superior y `center 60%` hacia la inferior. Conserva el degradado de `::before` para mantener el contraste del título sobre fondos claros o cargados.
+
+La galería usa carga diferida y abre las imágenes en un lightbox. Solo se incluyen las imágenes disponibles en el proyecto; agrega fotos autorizadas al directorio de recursos para reemplazar las repeticiones actuales.
+
+## Validar y compilar
 
 ```bash
 npm run check:config
 npm run build:production
 ```
 
-El build de producción genera `dist/invitation-studio/browser`. Publica su contenido en un hosting estático con fallback SPA a `index.html`, asegurando que JSON e imágenes se sigan sirviendo como archivos. La generación de páginas estáticas de compartición crea metadatos sociales por plantilla. En un hosting distinto de Vercel, define `INVITATION_SITE_ORIGIN` durante el build para generar URLs absolutas de Open Graph.
+El resultado publicable queda en `dist/emiliano-invitation/browser`. El build genera también metadatos estáticos para Open Graph, vista previa de WhatsApp/Facebook y datos estructurados.
 
-## Estructura del proyecto
+## Desplegar hoy en Vercel
 
-```text
-public/
-  config/events/       Configuración JSON y catálogo
-  images/              Imágenes locales
-src/app/
-  core/                Contratos, carga de datos y servicios
-  features/studio/     Catálogo y editor
-  features/invitation/ Renderizadores genéricos y específicos
-  features/themes/     Registro de temas y tokens
-scripts/               Validación y generación de páginas compartibles
-docs/                  Guías de arquitectura, operación y soporte
+1. Importa el repositorio en Vercel o instala el CLI con `npm i -g vercel`.
+2. Usa el comando de build `npm run build:production`.
+3. Usa el directorio de salida `dist/emiliano-invitation/browser`.
+4. Despliega:
+
+```bash
+npx vercel --prod
 ```
 
-## Temas y personalización
+El archivo `vercel.json` configura el build y la reescritura de la ruta antigua `/i/:slug`. Vercel proporciona su URL de despliegue al proceso de build para generar las URL sociales absolutas. Si compilas fuera de Vercel, define `INVITATION_SITE_ORIGIN` con el dominio público antes de compilar para que las vistas previas usen una URL absoluta.
 
-Los temas disponibles se definen en `src/app/features/themes/theme-registry.service.ts`. Para agregar un evento:
+## Accesibilidad y rendimiento
 
-1. Copia `public/config/events/emiliano-ulises.json` con un nuevo `slug`.
-2. Ajusta textos, edad, fecha, ubicación, secciones, RSVP, SEO, imágenes y tema. Las imágenes de galería se sirven desde `public/` para una carga rápida; publica fotos de Pinterest u otros sitios solo si tienes permiso para reutilizarlas.
-3. Añade una entrada correspondiente en `public/config/events/index.json`.
-4. Ejecuta `npm run check:config` y `npm run build:production`.
-
-Los cambios temporales del editor se guardan en el almacenamiento local del navegador. Para publicar, incorpora el JSON y recursos al repositorio y despliega el build; el guardado local no publica cambios.
-
-Consulta [docs/CONFIGURATION.md](./docs/CONFIGURATION.md), [docs/JSON-SCHEMA.md](./docs/JSON-SCHEMA.md), [docs/THEMES.md](./docs/THEMES.md) y [docs/OPERATIONS.md](./docs/OPERATIONS.md).
-
-## Solución de problemas
-
-- **La invitación no carga:** comprueba que el `slug` exista en catálogo y JSON y revisa Network/Console.
-- **La validación falla:** ejecuta `npm run check:config` para localizar errores de esquema o recursos.
-- **No se ven cambios publicados:** elimina el borrador de vista previa local o usa la acción de restaurar publicada.
-- **El build falla:** confirma la versión de Node.js, ejecuta `npm ci` y revisa el primer error de Angular/TypeScript.
-- **No aparecen metadatos al compartir:** vuelve a generar el build y confirma que el hosting sirve el HTML generado.
-
-## FAQ
-
-**¿Se guardan las respuestas RSVP en el servidor?** No. La invitación prepara un mensaje para enviar por WhatsApp; no hay backend ni almacenamiento central.
-
-**¿El editor publica automáticamente?** No. El editor guarda una vista previa local o permite descargar JSON. La publicación requiere actualizar el catálogo/configuración y desplegar.
-
-**¿Puedo usar fotos o música de terceros?** Solo si cuentas con autorización o una licencia compatible con su distribución.
-
-**¿Hay SSR?** No está configurado actualmente; el producto usa una SPA y genera HTML estático con metadatos de compartición.
-
-## Documentación
-
-- [Arquitectura](./docs/ARCHITECTURE.md)
-- [Configuración](./docs/CONFIGURATION.md)
-- [Esquema JSON](./docs/JSON-SCHEMA.md)
-- [Temas](./docs/THEMES.md)
-- [Integraciones de datos abiertos](./docs/OPEN-DATA.md)
-- [Soporte](./docs/SUPPORT.md)
-- [Operaciones](./docs/OPERATIONS.md)
-- [Desarrollo](./docs/DEVELOPMENT.md)
-- [Runbook](./docs/RUNBOOK.md)
+- Componentes standalone y Angular 22, sin dependencias visuales adicionales.
+- `NgOptimizedImage`, dimensiones explícitas y carga diferida para imágenes de galería.
+- Animación de confeti y transiciones ligeras; se respeta `prefers-reduced-motion`.
+- Navegación por teclado, indicadores de foco y etiquetas accesibles.

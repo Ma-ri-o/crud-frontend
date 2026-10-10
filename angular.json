@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "invitation-studio": {
+    "emiliano-invitation": {
       "projectType": "application",
       "root": "",
       "sourceRoot": "src",
@@ -12,7 +12,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/invitation-studio",
+            "outputPath": "dist/emiliano-invitation",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -61,10 +61,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "invitation-studio:build:production"
+              "buildTarget": "emiliano-invitation:build:production"
             },
             "development": {
-              "buildTarget": "invitation-studio:build:development"
+              "buildTarget": "emiliano-invitation:build:development"
             }
           },
           "defaultConfiguration": "development"
