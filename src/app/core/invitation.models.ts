@@ -21,6 +21,9 @@ export interface EventConfig {
   theme: ThemeId;
   colors?: { primary?: string; accent?: string; background?: string; text?: string; surface?: string };
   heroImage?: string;
+  heroImageWidth?: number;
+  heroImageHeight?: number;
+  heroSecondaryImage?: string;
   hostName: string;
   sections: Record<SectionId, boolean>;
   story: EventStory[];

@@ -43,8 +43,13 @@
       <div class="hero-art">
         <span class="art-orbit orbit-a" aria-hidden="true"></span>
         <span class="art-orbit orbit-b" aria-hidden="true"></span>
-        <img ngSrc="/images/emiliano-ulises/hero.svg" width="760" height="820" priority
-          alt="Un pequeño superhéroe y su compañero amarillo original listos para celebrar">
+        <img class="hero-cover-image" [ngSrc]="config().heroImage || '/images/emiliano-ulises/hero.svg'"
+          [width]="config().heroImageWidth || 760" [height]="config().heroImageHeight || 820" priority
+          alt="Minion listo para celebrar el cumpleaños de Emiliano Ulises">
+        @if (config().heroSecondaryImage; as secondaryImage) {
+          <img class="hero-secondary-image" [ngSrc]="secondaryImage" width="736" height="1472"
+            priority alt="Pequeño superhéroe sentado que acompaña a Emiliano en su aventura">
+        }
         <span class="hero-sticker sticker-top" aria-hidden="true">POW!</span>
         @if (config().age) { <span class="hero-sticker sticker-bottom" aria-hidden="true">{{ config().age }}★</span> }
       </div>

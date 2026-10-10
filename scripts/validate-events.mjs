@@ -13,13 +13,17 @@ for (const entry of index.templates ?? []) {
   }
   if (event.slug !== entry.slug) throw new Error(`${entry.slug}: el slug del JSON no coincide`);
   if (!Array.isArray(event.gallery) || !Array.isArray(event.story) || !Array.isArray(event.timeline)) throw new Error(`${entry.slug}: story, gallery y timeline deben ser arreglos`);
-  for (const photo of event.gallery) {
-    if (photo.src?.startsWith('/') && !photo.src.startsWith('//')) {
-      const asset = new URL(`../public${photo.src}`, import.meta.url);
+  if ((event.heroImageWidth !== undefined && (!Number.isInteger(event.heroImageWidth) || event.heroImageWidth <= 0))
+    || (event.heroImageHeight !== undefined && (!Number.isInteger(event.heroImageHeight) || event.heroImageHeight <= 0))) {
+    throw new Error(`${entry.slug}: las dimensiones de portada deben ser enteros positivos`);
+  }
+  for (const image of [event.heroImage, event.heroSecondaryImage, ...event.gallery.map((photo) => photo.src)]) {
+    if (image?.startsWith('/') && !image.startsWith('//')) {
+      const asset = new URL(`../public${image}`, import.meta.url);
       try {
         await readFile(asset);
       } catch {
-        throw new Error(`${entry.slug}: no se encuentra la imagen de galería ${photo.src}`);
+        throw new Error(`${entry.slug}: no se encuentra la imagen ${image}`);
       }
     }
   }
